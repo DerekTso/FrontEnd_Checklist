@@ -9,8 +9,10 @@
 - [百分比单位布局应用](#百分比单位布局应用)
 - [百分比单位缺点](#百分比单位缺点)
 - [自适应场景下的rem解决方案](#自适应场景下的rem解决方案)
-- [rem 布局的缺点](#rem-布局的缺点)
+- [rem布局的缺点](#rem布局的缺点)
 - [通过vw/vh来实现自适应](#通过vwvh来实现自适应)
+- [使用流式浮动栅格布局](#使用流式浮动栅格布局)
+- [流式浮动栅格布局的缺点](#流式浮动栅格布局的缺点)
 - [meta标签](#meta标签)
 - [使用 media query 适配对应样式](#使用-media-query-适配对应样式)
 
@@ -35,7 +37,7 @@
 1 CSS像素 = 物理像素／分辨率
 
 // 在移动端的布局中，我们可以通过 viewport meta 标签来控制布局
-<meta id="viewport" name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1; user-scalable=no;">
+<meta id="viewport" name="viewport" content="width=device-width;initial-scale=1.0;user-scalable=no;">
 ```
 
 ### px与自适应
@@ -260,7 +262,7 @@ loader: "style-loader!css-loader!postcss-loader"
 }
 ```
 
-### rem 布局的缺点
+### rem布局的缺点
 
 ```
 1. 在响应式布局中，必须通过js来动态控制根元素font-size的大小，css样式和js代码有一定的耦合性
@@ -288,6 +290,89 @@ var defaults = {
   minPixelValue: 1,
   mediaQuery: false
 };
+```
+
+### 使用流式浮动栅格布局
+
+```
+1. 栅格布局方便在不同屏幕设备中进行增删或者移动从而实现各种大小屏幕的适配2. 如小屏幕一栏，大屏幕三栏，每栏的宽度用流式布局（width使用百分比）进行适应
+3. 使用浮动进行横排。最外层包裹元素一般加个max-width，防止pc大屏太宽
+
+<main>
+    <aside></aside>
+    <article></article>
+    <aside></aside>
+</main>
+<style>
+    main{
+        max-width:1200px;
+    }
+    aside{
+        float:left;
+        width: 20%;
+    }
+    article{
+        float:left;
+        width: 60%;
+    }
+    @media (max-width:481px) {
+    aside {
+        float: none;
+        width: auto;
+    }
+    article{
+        float: none;
+        width: auto;
+    }
+}
+</style>
+```
+
+### 流式浮动栅格布局的缺点
+
+```
+1. 重置盒子模型
+
+web浏览器的盒子模型默认是不把边框和内边距计算在内容区的width中的（IE低版本除外）
+所以要设置 box-sizing：border; 将边框和内边距计算进内容区的width中
+
+2. HTML代码的顺序
+
+为了增强用户体验，让移动端的用户第一眼就能看到主要内容，而不用下拉
+所以HTML编码时，应该让主内容区放到最上层，要浮动时，加个外层，让主内容区和相邻侧边分别浮动到两边即可
+
+<div>
+    <article></article>
+    <aside></aside>
+</div>
+<aside></aside>
+
+div{
+    float:left;
+    width: 80%;
+}
+div article{
+    float:right;
+    width: 75%;
+}
+div aside{
+    float:left;
+    width: 25%
+}
+aside{
+    float:left;
+    width: 20%
+}
+
+3. 图片和视频的大小
+
+图片也要用百分比，不然会溢出布局之外，一般用max-width：100%
+当没有溢出布局时，图片保持原来大小不变，但要溢出布局时，限制图片的最大宽度为布局宽度
+注意图片的高度不要设置，不然高度固定的话，图片的宽度变化会导致变形，高度不设置，让它随宽度自动做等比例变化即可
+
+本来移动端要展示的是小图片，但却要下载大图片造成流量的浪费
+解决的方法挺多的，比如img最新的srcset属性（有兼容性问题，IE完全不支持）
+或者是用js判断获取不同的图片
 ```
 
 ### meta标签
@@ -334,9 +419,16 @@ orientation 浏览器窗口的方向纵向还是横向，当窗口的高度值�
 aspect-ratio 比例值，浏览器的纵横比；
 device-aspect-ratio 比例值，设备屏幕的纵横比。
 
+// 在样式表中使用
 /** iPad **/
 @media only screen and (min-width: 768px) and (max-width: 1024px) {}
 
 /** iPhone **/
 @media only screen and (min-width: 320px) and (max-width: 767px) {}
+
+// 在连接时调用
+<link href="styles.css" rel="stylesheet" media="(max-width:480px)">
+
+// 使用@import导入
+@import url(styles.css) (max-width:480px)
 ```
