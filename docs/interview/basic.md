@@ -1,11 +1,79 @@
 # 前端面试 - 基础题
 
-#### Q: 将静态资源放在其他域名的目的是什么？
+## 目录
+- [面试问题](#面试问题)
+- [Q: 如何实现一个bind函数](#q-如何实现一个bind函数)
+- [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
+- [Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？](#q-在浏览器地址栏键入url按下回车之后会发生什么)
+- [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
+- [Q: 将静态资源放在其他域名的目的是什么？](#q-将静态资源放在其他域名的目的是什么)
+- [Q: 跨域问题](#q-跨域问题)
+- [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
+- [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
+- [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
+- [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
+- [Q: relative 和 absolute 分别是相对于谁进行定位的？](#q-relative-和-absolute-分别是相对于谁进行定位的)
+- [Q: HTML5行内元素有哪些，块级元素有哪些，空元素有哪些?](#q-html5行内元素有哪些块级元素有哪些空元素有哪些)
+- [Q: 什么是css盒模型](#q-什么是css盒模型)
+
+### 面试问题
+
+1. 问清楚公司做的什么产品，以后的发展方向
+2. 问清楚公司的技术团队，技术栈
+3. 问清楚自己如果入职了，自己的工作内容是什么
+4. 问清楚公司的上班时间，上班地点，试用期情况，薪资福利，薪资发放时间，五险一金
+5. 拿到 offer 后查清楚公司的企业信息，如：企查查就可以查
+
+### Q: 如何实现一个bind函数
+
+```
+Function.prototype.bind=function(obj,arg){
+  var arg=Array.prototype.slice.call(arguments,1);
+  var context=this;
+  var bound=function(newArg){
+    arg=arg.concat(Array.prototype.slice.call(newArg));
+    return context.apply(obj,arg);
+  }
+  //寄生组合继承
+  var F=function(){}
+  F.prototype=context.prototype;
+  bound.prototype=new F();
+  return bound;
+}
+```
+
+### Q: 从输入URL到页面加载发生了什么？
+
+1. DNS解析
+2. TCP连接
+3. 发送HTTP请求
+4. 服务器处理请求并返回HTTP报文
+5. 浏览器解析渲染页面
+6. 连接结束
+
+### Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？
+
+1. 浏览器向 DNS 服务器请求解析该 URL 中的域名所对应的 IP 地址
+2. 解析出 IP 地址后，根据该 IP 地址和默认端口 80，和服务器建立TCP连接
+3. 浏览器发出读取文件的 HTTP 请求，该请求报文作为 TCP 三次握手的第三个报文的数据发送给服务器
+4. 服务器对浏览器请求作出响应，并把对应的 html 文本发送给浏览器
+5. 释放 TCP 连接
+6. 浏览器解析渲染页面
+
+### Q: window.onload 和 document.ready 的区别
+
+1. window.onload 是在页面中包含图片在内的所有元素全部加载完成
+2. document.ready 是文档结构加载完成，但不包含图片，其他媒体文件
+3. 在 jQuery 中会看到 $(function(){}) 和 $(document).ready(function(){})，是在DOM树加载完成之后执行
+4. window.onload 是在DOM树加载完以及所有文件加载完成才执行，因此慢于document.ready
+5. 当页面文档加载并解析完毕之后会马上触发 DOMContentLoaded 事件，而不会等待样式文件、图片文件和子框架页面的加载
+
+### Q: 将静态资源放在其他域名的目的是什么？
 
 1. 在请求这些静态资源的时候不会发送 cookie，节省了流量（ cookie 是会发送给子域名/二级域名的，所以这些静态资源要放在一个单独的主域名下）
 2. 浏览器对于一个域名会有请求数的限制，这种方法可以方便做CDN
 
-#### Q: 跨域问题
+### Q: 跨域问题
 
 1. 浏览器的同源策略导致了跨域
 2. 用于隔离潜在恶意文件的重要安全机制
@@ -13,3 +81,64 @@
 4. nginx 反向代理（nginx 服务内部配置 Access-Control-Allow-Origin *）
 5. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
 6. iframe 嵌套通讯，postmessage
+
+### Q: GET 和 POST 的区别
+
+1. GET 提交的数据会放在 URL 之后，以?分割 URL 和传输数据，参数之间以&相连，如EditPosts.aspx?name=test1&id=123456
+2. POST 方法是把提交的数据放在 HTTP 包的 Body 中
+3. GET 提交的数据大小有限制
+4. POST 提交的数据没有限制
+5. GET 方式需要使用 Request.QueryString 来取得变量的值
+6. POST 方式通过 Request.Form 来获取变量的值
+7. GET 方式提交数据，会带来安全问题，比如一个登录页面，通过GET方式提交数据时，用户名和密码将出现在URL上
+
+### Q: mouseover 和 mouseenter 的区别
+
+1. mouseover: 当鼠标移入元素或其子元素都会触发事件，所以有一个重复触发，冒泡的过程。对应的移除事件是mouseout
+
+2. mouseenter: 当鼠标移入元素本身（不包含元素的子元素）会触发事件，也就是不会冒泡，对应的移除事件是mouseleave
+
+### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
+
+1. offsetWidth/offsetHeight 返回值包含 content + padding + border + 滚动条，效果与ele.getBoundingClientRect()相同
+2. clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
+3. scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸(因滚动被隐藏的部分)
+
+### Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别
+
+1. 与 setTimeout 和 setInterval 不同，requestAnimationFrame 不需要设置时间间隔
+2. requestAnimationFrame 采用的是系统时间间隔，不会因为前面的任务而受到影响
+3. setTimeout 和 setInterval 真正运行时的时间间隔会因为前面的任务而受到影响
+4. requestAnimationFrame 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率
+5. 在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的CPU、GPU和内存使用量
+6. requestAnimationFrame 是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销
+
+### Q: relative 和 absolute 分别是相对于谁进行定位的？
+
+1. absolute: 相对于最近一级的定位不是 static 的父元素来进行定位
+2. fixed: 相对于浏览器窗口或 frame 进行定位
+3. relative: 相对于其在普通流中的位置进行定位
+4. static: 没有定位，元素出现在正常的流中
+5. sticky: 容器的位置根据正常文档流计算得出
+
+### Q: HTML5行内元素有哪些，块级元素有哪些，空元素有哪些?
+
+1. 行内元素有：a b span img input select strong
+2. 块级元素有：div ul ol li dl dt dd h1 h2 h3 h4…p
+3. 常见的空元素：br hr img input link meta
+
+### Q: 什么是css盒模型
+
+* 标准盒子模型
+
+![标准盒子模型](../../images/interview_basic_standard_box.png)
+
+* IE盒子模型
+
+![IE盒子模型](../../images/interview_basic_ie_box.png)
+
+1. CSS中的盒子模型包括 IE盒子模型 和 标准的W3C盒子模型
+2. box-sizing 有3个值：border-box, padding-box, content-box
+3. 在标准盒子模型中，width指 content 部分的宽度
+4. 在IE盒子模型中，width表示 content+padding+border 这三个部分的宽度
+5. CSS3中引入了 box-sizing 属性，box-sizing:content-box;表示标准的盒子模型，box-sizing:border-box;表示的是IE盒子模型

@@ -86,4 +86,4 @@ console.log(a.prototype.__proto__);  //Object{}
 console.log(a.__proto__.__proto__); //Object{}
 console.log(a.__proto__.__proto__ == a.prototype.__proto__); //true
 ```
-![Javascript原型链](../images/prototype.png)
+![Javascript原型链](../../images/js_beginner_prototype.png)
