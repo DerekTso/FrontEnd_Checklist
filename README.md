@@ -16,7 +16,8 @@
 
 ### Javascript Intermediate
 
-- [Javascript基础 - 性能优化](docs/js_intermediate/optimization.md)
+- [Javascript进阶 - 前端缓存](docs/js_intermediate/cache.md)
+- [Javascript进阶 - 性能优化](docs/js_intermediate/optimization.md)
 
 ### Javascript Advacned
 
