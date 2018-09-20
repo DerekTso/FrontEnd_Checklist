@@ -13,6 +13,7 @@
 - [Javascript基础 - 事件流](docs/js_beginner/eventFlow.md)
 - [Javascript基础 - 页面渲染](docs/js_beginner/render.md)
 - [Javascript基础 - 防抖和节流](docs/js_beginner/debounce_throttle.md)
+- [Javascript基础 - ES6之Proxy](docs/js_beginner/es6_proxy.md)
 
 ### Javascript Intermediate
 
