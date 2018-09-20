@@ -242,6 +242,58 @@ console.log(/abc/ instanceof RegExp); //true
 console.log(new Date() instanceof Date); //true
 ```
 
+### 数据类型的单独检测
+
+```
+function isUndefined(obj) {
+    return obj === void 0;
+}
+
+function isNull(obj) {
+    return obj === null;
+}
+
+function isBoolean(obj) {
+    return typeof(obj) === 'boolean';
+}
+
+function isNumber(obj) {
+    return typeof(obj) === 'number';
+}
+
+function isString(obj) {
+    return typeof(obj) === 'string';
+}
+
+function isObject(obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
+}
+
+function isArray(obj){
+    return Array.isArray?Array.isArray(obj):Object.prototype.toString.call(obj) === '[object Array]';
+}
+
+function isFunction(obj){
+    return typeof(obj) === 'function';
+}
+
+function isDate(obj){
+    return Object.prototype.toString.call(obj) === '[object Date]';
+}
+
+function isRegExp(obj){
+    return Object.prototype.toString.call(obj) === '[object RegExp]';
+}
+
+function isError(obj){
+    return Object.prototype.toString.call(obj) === '[object Error]';
+}
+
+function isArguments(obj){
+    return Object.prototype.toString.call(obj) === '[object Arguments]';
+}
+```
+
 ### 对象字面量(Object literals)
 
 ```
