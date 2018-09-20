@@ -78,6 +78,11 @@ console.log(typeof o1.fn); //object
 var o2=new Obj();
 console.log(o2.a); //[]
 console.log(typeof o2.fn); //function
+
+// 三种遍历对象的方法:
+for in: 会输出自身以及原型链上可枚举的属性
+Object.keys(): 用来获取对象自身可枚举的属性键
+Object.getOwnPropertyNames(): 用来获取对象自身的全部属性名
 ```
 
 ### 变量声明提升(Variable hoisting)
@@ -133,17 +138,42 @@ if (true) {
   let y = 5; // let 添加了块级作用域
 }
 console.log(y); // ReferenceError: y is not defined
+
+// i 在 for 循环中定义的是全局变量
+var a = [];
+for (var i = 0; i < 10; i++) {
+  a[i] = function () {
+    console.log(i);
+  };
+}
+a[0](); // 10
+a[6](); // 10
+
+// 用let来代替var，每一次的循环都生成了一个新的块级作用域，内部保存着i的值
+var a = [];
+for (let i = 0; i < 10; i++) {
+ a[i] = function () {
+   console.log(i);
+ };
+}
+a[6](); // 6
 ```
 
-### let 有暂时性死区
+### let 有暂时性死区(Temporal Dead Zone)
 
 ```
 // 只要在语句块内有 let 命令，那么这个变量就绑定到了当前块作用域，不再受外部变量的影响，下面代码将会引发一个错误：
 var foo = 3;
 if (true) {
-  foo = 5; // Uncaught ReferenceError
+  foo = 5; // Uncaught ReferenceError: foo is not defined
   let foo;
 }
+
+// 在TDZ中使用 typeof 也会报错
+console.log( typeof a); // undefined
+
+console.log( typeof a); // ReferenceError: a is not defined
+let a=10;
 ```
 
 ### let 禁止重复声明变量
