@@ -363,6 +363,15 @@ console.log(inventory.find(findCherries));
 
 [1, 2, 3].includes(2);     // true
 [1, 2, 3].includes(4);     // false
+
+// includes 与 indexof 的区别
+1. includes 与 indexof 既可以进行字符串的判断，也可以进行数组值的判断
+2. 但是 indexof 在对 NaN 进行判断时会出现不准确
+3. indexof 的返回结果为 -1||0，includes 为 true||false
+
+var text = [1,NaN]
+console.log(text.indexOf(NaN)); //-1
+console.log(text.includes(NaN)); //true
 ```
 
 ### 数组去重
