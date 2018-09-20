@@ -2,7 +2,9 @@
 
 ## 目录
 - [面试问题](#面试问题)
-- [Q: 如何实现一个bind函数](#q-如何实现一个bind函数)
+- [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
+- [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
+- [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
 - [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
 - [Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？](#q-在浏览器地址栏键入url按下回车之后会发生什么)
 - [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
@@ -24,10 +26,10 @@
 4. 问清楚公司的上班时间，上班地点，试用期情况，薪资福利，薪资发放时间，五险一金
 5. 拿到 offer 后查清楚公司的企业信息，如：企查查就可以查
 
-### Q: 如何实现一个bind函数
+### Q: 如何实现一个 bind 函数
 
 ```
-Function.prototype.bind=function(obj,arg){
+Function.prototype.myBind=function(obj,arg){
   var arg=Array.prototype.slice.call(arguments,1);
   var context=this;
   var bound=function(newArg){
@@ -39,6 +41,54 @@ Function.prototype.bind=function(obj,arg){
   F.prototype=context.prototype;
   bound.prototype=new F();
   return bound;
+}
+
+或者
+
+Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  var _this = this
+  var args = [...arguments].slice(1)
+  // 返回一个函数
+  return function F() {
+    // 因为返回了一个函数，我们可以 new F()，所以需要判断
+    if (this instanceof F) {
+      return new _this(...args, ...arguments)
+    }
+    return _this.apply(context, args.concat(...arguments))
+  }
+}
+```
+
+### Q: 如何实现一个 call 函数
+
+```
+Function.prototype.myCall = function (context) {
+  var context = context || window
+  context.fn = this
+  var args = [...arguments].slice(1)
+  var result = context.fn(...args)
+  delete context.fn
+  return result
+}
+```
+
+### Q: 如何实现一个 apply 函数
+
+```
+Function.prototype.myApply = function (context) {
+  var context = context || window
+  context.fn = this
+  var result
+  if (arguments[1]) {
+    result = context.fn(...arguments[1])
+  } else {
+    result = context.fn()
+  }
+  delete context.fn
+  return result
 }
 ```
 
