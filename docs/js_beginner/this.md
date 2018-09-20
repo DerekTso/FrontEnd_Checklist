@@ -154,6 +154,12 @@ function myNew() {
 ### ES6箭头函数中的this
 
 ```
+// 箭头函数有几个使用注意点：
+1. 函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象
+2. 不可以当作构造函数，不可以使用 new 命令，否则会抛出一个错误
+3. 不可以使用 arguments 对象，该对象在函数体内不存在
+4. 不可以使用 yield 命令，因此箭头函数不能用作 Generator 函数
+
 const car = {
   brand: 'Ford',
   model: 'Fiesta',
@@ -170,6 +176,15 @@ car.stop() // Stopped undefined undefined
 
 // 这是因为 this 的处理在两个函数声明样式中是不同的。
 // 箭头函数中的 this 指的是封闭函数上下文，在本例中是window对象
+
+// argumet 在箭头函数中不存在，那么使用 argument 将会使用外部函数的 argument
+function foo() {
+  setTimeout(() => {
+    console.log('args:', arguments);
+  }, 100);
+}
+foo(2, 4, 6, 8)
+// args: [2, 4, 6, 8]
 ```
 
 ### IIFE，立即调用函数表达式
