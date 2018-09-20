@@ -4,6 +4,7 @@
 - [数据类型(Data type)](#数据类型data-type)
 - [数据类型转换(Data type conversion)](#数据类型的转换data-type-conversion)
 - [数据类型检测(Data type detection)](#数据类型检测data-type-detection)
+- [数据类型检测方法(Data type detection methods)](#数据类型检测方法)
 - [对象字面量(Object literals)](#对象字面量object-literals)
 
 ### 数据类型(Data type)
@@ -242,7 +243,7 @@ console.log(/abc/ instanceof RegExp); //true
 console.log(new Date() instanceof Date); //true
 ```
 
-### 数据类型的单独检测
+### 数据类型检测方法(Data type detection methods)
 
 ```
 function isUndefined(obj) {
