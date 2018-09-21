@@ -154,6 +154,46 @@ Function.prototype.myApply = function (context) {
 2. clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
 3. scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸(因滚动被隐藏的部分)
 
+* offsetWidth / clientWidth / scrollWidth
+
+![interview_basic_width](../../images/interview_basic_width.png)
+
+* offsetParent / offsetLeft / offtsetTop
+
+![interview_basic_offsetLeft](../../images/interview_basic_offsetLeft.png)
+
+* clientLeft / clientTop (内部与外部的相对坐标 / border)
+
+![interview_basic_clientLeft](../../images/interview_basic_clientLeft.png)
+
+* scrollTop / scrollHeight
+
+1. 元素的 scrollTop 值是这个元素的顶部到它的最顶部可见内容的顶部的距离的度量
+2. 大多数几何结构属性都是只读的，但是 scrollLeft 和 scrollTop 是可更改的
+3. 如果将 scrollTop 设置为 0 或 Infinity 将会使元素分别滚动到浏览器的最顶端和最底端
+
+![interview_basic_scrollTop](../../images/interview_basic_scrollTop.png)
+
+* 几何结构
+
+![interview_basic_element_size](../../images/interview_basic_element_size.png)
+
+```
+#contentDiv {
+  width: 300px;
+  height: 200px;
+  border: 25px solid #E8C48F;
+  padding: 20px;
+  overflow: auto;
+}
+1. 如果没有滚动条，内容（content）的 width 将是300px
+2. 如果滚动条的宽度是16px（不同的设备和浏览器的宽度不同），那么内容的 width 将是300 - 16 = 284px
+3. 那么 clientWidth = 2 * padding + width = 2 * 20 + 284 = 324
+```
+
+
+
+
 ### Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别
 
 1. 与 setTimeout 和 setInterval 不同，requestAnimationFrame 不需要设置时间间隔
