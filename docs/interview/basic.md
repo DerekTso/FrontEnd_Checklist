@@ -2,6 +2,7 @@
 
 ## 目录
 - [面试问题](#面试问题)
+- [典型的JavaScript面试题](#典型的JavaScript面试题)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
@@ -15,8 +16,9 @@
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: relative 和 absolute 分别是相对于谁进行定位的？](#q-relative-和-absolute-分别是相对于谁进行定位的)
-- [Q: HTML5行内元素有哪些，块级元素有哪些，空元素有哪些?](#q-html5行内元素有哪些块级元素有哪些空元素有哪些)
-- [Q: 什么是css盒模型](#q-什么是css盒模型)
+- [Q: HTML5行内元素有哪些，块级元素有哪些，空元素有哪些?](#q-html5行内元素有哪些块级元素有哪些空元素有哪些?)
+- [Q: HTML5 有哪些新特性?](#q-HTML5-有哪些新特性?)
+- [Q: 什么是css盒模型](#q-什么是css盒模型?)
 
 ### 面试问题
 
@@ -25,6 +27,40 @@
 3. 问清楚自己如果入职了，自己的工作内容是什么
 4. 问清楚公司的上班时间，上班地点，试用期情况，薪资福利，薪资发放时间，五险一金
 5. 拿到 offer 后查清楚公司的企业信息，如：企查查就可以查
+
+### 典型的JavaScript面试题
+
+```
+(function() {
+  var a = b = 5;
+})();
+console.log(b); // 输出：5
+
+1. a是用关键字 var 来声明的，a是局部变量
+2. b则被赋予为全局变量
+3. 它并没有使用严格模式（use strict），如果启用了严格模式，代码就会报错："Uncaught ReferenceError: b is not defined"
+4. 严格模式需要显式地引用全局作用域，如：
+(function() {
+'use strict';
+  var a = window.b = 5;
+})();
+console.log(b); // 输出：5
+```
+
+```
+function test() {
+  console.log(a);
+  console.log(foo());
+  var a = 1;
+  function foo() {
+    return 2;
+  }}
+test(); // undefined 2
+
+1. 变量和函数的声明都被提前至函数体的顶部
+2. 变量并没有被赋值。虽然 a 已经被声明，但仍然是undefined
+```
+
 
 ### Q: 如何实现一个 bind 函数
 
@@ -191,9 +227,6 @@ Function.prototype.myApply = function (context) {
 3. 那么 clientWidth = 2 * padding + width = 2 * 20 + 284 = 324
 ```
 
-
-
-
 ### Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别
 
 1. 与 setTimeout 和 setInterval 不同，requestAnimationFrame 不需要设置时间间隔
@@ -213,11 +246,30 @@ Function.prototype.myApply = function (context) {
 
 ### Q: HTML5行内元素有哪些，块级元素有哪些，空元素有哪些?
 
-1. 行内元素有：a b span img input select strong
-2. 块级元素有：div ul ol li dl dt dd h1 h2 h3 h4…p
-3. 常见的空元素：br hr img input link meta
+1. 行内元素有：a、span、button、input、select、textarea、i、em、strong
+2. 块级元素
+    - 2.1. 布局类: div、section、header、footer、aside、nav、article等
+    - 2.2. 列表类: ul、li、ol
+    - 2.3. form、p、table、标题h1~h6
 
-### Q: 什么是css盒模型
+### Q: HTML5 有哪些新特性?
+
+1. 语义化标签: header、footer、nav、aside、article、section 等
+2. 增强表单: 为 input 增加 color、email、date、range 等类型
+3. 存储方面: 提供了 sessionStorage 、localStorage 和离线存储
+4. 多媒体方面: 规定了音频和视频元素audio和video
+5. 还有地理定位、canvas画布、拖放、多线程编程的 web workers 和 websocket 协议
+
+### Q: HTML5的存储方案有哪些?
+
+1. HTML5提供了 sessionStorage、localStorage 和 离线存储
+2. sessionStorage 和 localStorage 都是采用键值对的形式存储，通过 setItem、getItem、removeItem 来实现增删查改
+3. sessionStorage 是会话存储，当浏览器关闭之后，自动清空
+4. localStorage 没有时间上的限制，当浏览器关闭之后，不会自动清空
+5. 离线存储用来确保 web 应用能够在离线情况下使用，通过在html标签中属性manifest来声明需要缓存的文件
+6. manifest 文件声明的缓存文件可在初次加载后缓存在客户端，可以通过更新这个 manifest 文件来达到更新缓存文件的目的
+
+### Q: 什么是css盒模型?
 
 * 标准盒子模型
 
