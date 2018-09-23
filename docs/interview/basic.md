@@ -2,16 +2,26 @@
 
 ## 目录
 - [面试问题](#面试问题)
+
+### JavaScript 相关
+
 - [典型的JavaScript面试题](#典型的JavaScript面试题)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
+- [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
+- [如何理解 V8 引擎字节码?](#q-如何理解-V8-引擎字节码?)
+
+### 服务器相关
+
 - [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
 - [Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？](#q-在浏览器地址栏键入url按下回车之后会发生什么)
-- [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
 - [Q: 将静态资源放在其他域名的目的是什么？](#q-将静态资源放在其他域名的目的是什么)
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
+
+### 页面布局相关
+
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
@@ -60,7 +70,6 @@ test(); // undefined 2
 1. 变量和函数的声明都被提前至函数体的顶部
 2. 变量并没有被赋值。虽然 a 已经被声明，但仍然是undefined
 ```
-
 
 ### Q: 如何实现一个 bind 函数
 
@@ -128,6 +137,24 @@ Function.prototype.myApply = function (context) {
 }
 ```
 
+### Q: window.onload 和 document.ready 的区别
+
+1. window.onload 是在页面中包含图片在内的所有元素全部加载完成
+2. document.ready 是文档结构加载完成，但不包含图片，其他媒体文件
+3. 在 jQuery 中会看到 $(function(){}) 和 $(document).ready(function(){})，是在DOM树加载完成之后执行
+4. window.onload 是在DOM树加载完以及所有文件加载完成才执行，因此慢于document.ready
+5. 当页面文档加载并解析完毕之后会马上触发 DOMContentLoaded 事件，而不会等待样式文件、图片文件和子框架页面的加载
+
+### Q: 如何理解 V8 引擎字节码?
+
+1. 当 V8 编译 JavaScript 代码时，解析器(parser)将生成一个抽象语法树
+2. 语法树是 JavaScript 代码的句法结构的树形表示形式
+3. 解释器 Ignition 根据语法树生成字节码
+4. TurboFan 是 V8 的优化编译器，TurboFan 将字节码生成优化的机器代码
+![interview_basic_v8_bytecode](../../images/interview_basic_v8_bytecode.png)
+
+---
+
 ### Q: 从输入URL到页面加载发生了什么？
 
 1. DNS解析
@@ -145,14 +172,6 @@ Function.prototype.myApply = function (context) {
 4. 服务器对浏览器请求作出响应，并把对应的 html 文本发送给浏览器
 5. 释放 TCP 连接
 6. 浏览器解析渲染页面
-
-### Q: window.onload 和 document.ready 的区别
-
-1. window.onload 是在页面中包含图片在内的所有元素全部加载完成
-2. document.ready 是文档结构加载完成，但不包含图片，其他媒体文件
-3. 在 jQuery 中会看到 $(function(){}) 和 $(document).ready(function(){})，是在DOM树加载完成之后执行
-4. window.onload 是在DOM树加载完以及所有文件加载完成才执行，因此慢于document.ready
-5. 当页面文档加载并解析完毕之后会马上触发 DOMContentLoaded 事件，而不会等待样式文件、图片文件和子框架页面的加载
 
 ### Q: 将静态资源放在其他域名的目的是什么？
 
@@ -177,6 +196,8 @@ Function.prototype.myApply = function (context) {
 5. GET 方式需要使用 Request.QueryString 来取得变量的值
 6. POST 方式通过 Request.Form 来获取变量的值
 7. GET 方式提交数据，会带来安全问题，比如一个登录页面，通过GET方式提交数据时，用户名和密码将出现在URL上
+
+---
 
 ### Q: mouseover 和 mouseenter 的区别
 
@@ -284,3 +305,5 @@ Function.prototype.myApply = function (context) {
 3. 在标准盒子模型中，width指 content 部分的宽度
 4. 在IE盒子模型中，width表示 content+padding+border 这三个部分的宽度
 5. CSS3中引入了 box-sizing 属性，box-sizing:content-box;表示标准的盒子模型，box-sizing:border-box;表示的是IE盒子模型
+
+---
