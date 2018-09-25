@@ -4,6 +4,7 @@
 - [什么是 WebSocket](#什么是-websocket)
 - [如何建立 WebSocket 连接](#如何建立-websocket-连接)
 - [一个典型的 Websocket 握手请求](#一个典型的-websocket-握手请求)
+- [创建 WebSocket 对象](#创建-WebSocket-对象)
 - [WebSocket 实例](#websocket-实例)
 
 ### 什么是 WebSocket
@@ -51,6 +52,30 @@ Sec-WebSocket-Location: ws://example.com/
 4. Sec-WebSocket-Version 表示支持的 Websocket 版本。RFC6455 要求使用的版本是 13
 5. Origin 字段是可选的，通常用来表示在浏览器中发起此 Websocket 连接所在的页面，类似于 Referer。但是，与 Referer 不同的是，Origin 只包含了协议和主机名称
 6. 其他一些定义在 HTTP 协议中的字段，如 Cookie 等，也可以在 Websocket 中使用
+
+### 创建 WebSocket 对象
+
+```var Socket = new WebSocket(url, [protocol] );```
+
+1. 第一个参数 url, 指定连接的 URL
+2. 第二个参数 protocol 是可选的，指定了可接受的子协议
+
+// WebSocket 属性
+
+* Socket.readyState(只读属性/表示连接状态)
+
+    - 0 - 表示连接尚未建立
+    - 1 - 表示连接已建立，可以进行通信
+    - 2 - 表示连接正在进行关闭
+    - 3 - 表示连接已经关闭或者连接不能打开
+
+* Socket.bufferedAmount(只读属性/还没有发出的 UTF-8 文本字节数)
+
+// WebSocket 方法
+
+- Socket.send()     使用连接发送数据
+- Socket.close()    关闭连接
+
 
 ### WebSocket 实例
 
