@@ -30,6 +30,7 @@
 
 - [HTML5基础 - 响应式布局](docs/h5_css3/responsiveDesign.md)
 - [HTML5基础 - WebSocket](docs/h5_css3/webSocket.md)
+- [HTML5基础 - WebWorker](docs/h5_css3/webWorker.md)
 
 ### Interview Related
 
