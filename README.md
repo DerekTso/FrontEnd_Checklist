@@ -28,6 +28,7 @@
 - [Javascript基础 - React](docs/js_advanced/React.md)
 - [Javascript基础 - Redux](docs/js_advanced/Redux.md)
 - [Javascript基础 - React and Redux](docs/js_advanced/React_and_Redux.md)
+- [Javascript基础 - React App With Electron](docs/js_advanced/React_and_Electron.md)
 
 ### HTML5 / CSS3
 
