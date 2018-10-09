@@ -23,12 +23,13 @@
 
 ### Javascript Advacned
 
-- [Javascript进阶 - Web安全漏洞之CSRF](docs/js_advanced/security_csrf.md)
-- [Javascript基础 - webpack](docs/js_advanced/webpack.md)
-- [Javascript基础 - React](docs/js_advanced/React.md)
-- [Javascript基础 - Redux](docs/js_advanced/Redux.md)
-- [Javascript基础 - React and Redux](docs/js_advanced/React_and_Redux.md)
-- [Javascript基础 - React App With Electron](docs/js_advanced/React_and_Electron.md)
+- [Javascript高阶 - Web安全漏洞之CSRF](docs/js_advanced/security_csrf.md)
+- [Javascript高阶 - webpack](docs/js_advanced/webpack.md)
+- [Javascript高阶 - React](docs/js_advanced/React.md)
+- [Javascript高阶 - Redux](docs/js_advanced/Redux.md)
+- [Javascript高阶 - React and Redux](docs/js_advanced/React_and_Redux.md)
+- [Javascript高阶 - React App With Electron](docs/js_advanced/React_and_Electron.md)
+- [Javascript高阶 - Vue_Essentials](docs/js_advanced/Vue_Essentials.md)
 
 ### HTML5 / CSS3
 

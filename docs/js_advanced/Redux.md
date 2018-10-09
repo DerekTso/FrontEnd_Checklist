@@ -1,4 +1,4 @@
-# Javascript基础 - Redux
+# Javascript高阶 - Redux
 
 ## 目录
 - [What is Redux](#what-is-redux)

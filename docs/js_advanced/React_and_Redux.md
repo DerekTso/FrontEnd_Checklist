@@ -1,4 +1,4 @@
-# Javascript基础 - React and Redux
+# Javascript高阶 - React and Redux
 
 ## 目录
 - [how to use Redux with React](#how-to-use-redux-with-react)

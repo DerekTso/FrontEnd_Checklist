@@ -1,4 +1,4 @@
-# Web安全漏洞之CSRF
+# Javascript高阶 - Web安全漏洞之CSRF
 
 ## 目录
 - [什么是 CSRF(Cross-Site Request Forgery)](#什么是-csrfcross-site-request-forgery)
