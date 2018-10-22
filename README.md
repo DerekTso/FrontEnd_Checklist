@@ -30,6 +30,7 @@
 - [Javascript高阶 - React and Redux](docs/js_advanced/React_and_Redux.md)
 - [Javascript高阶 - React App With Electron](docs/js_advanced/React_and_Electron.md)
 - [Javascript高阶 - Vue_Essentials](docs/js_advanced/Vue_Essentials.md)
+- [Javascript高阶 - Vue_Components_In-Depth](docs/js_advanced/Vue_Components_In-Depth.md)
 
 ### HTML5 / CSS3
 
