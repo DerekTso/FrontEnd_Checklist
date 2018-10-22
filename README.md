@@ -14,6 +14,7 @@
 - [Javascript基础 - 页面渲染](docs/js_beginner/render.md)
 - [Javascript基础 - 防抖和节流](docs/js_beginner/debounce_throttle.md)
 - [Javascript基础 - ES6之Proxy](docs/js_beginner/es6_proxy.md)
+- [Javascript基础 - defineProperty与proxy](docs/js_beginner/defineProperty与proxy.md)
 
 ### Javascript Intermediate
 
