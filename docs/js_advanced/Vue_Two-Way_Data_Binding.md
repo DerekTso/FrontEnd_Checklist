@@ -1,6 +1,12 @@
 # Javascript高阶 - Vue Two-Way Data Binding
 
 ## 目录
+- [mvvm双向绑定](#mvvm双向绑定)
+- [思路分析](#思路分析)
+- [实现Observer](#实现observer)
+- [实现Dep](#实现dep)
+- [实现Compile](#实现compile)
+- [实现Watcher](#实现watcher)
 
 ### mvvm双向绑定
 
