@@ -34,6 +34,7 @@
 - [Javascript高阶 - Vue_Components_In-Depth](docs/js_advanced/Vue_Components_In-Depth.md)
 - [Javascript高阶 - Vue_Two-Way_Data_Binding](docs/js_advanced/Vue_Two-Way_Data_Binding.md)
 - [Javascript高阶 - Vue_Mixin](docs/js_advanced/Vue_Mixin.md)
+- [Javascript高阶 - Vue_Component_Communication](docs/js_advanced/Vue_Component_Communication.md)
 
 ### HTML5 / CSS3
 
