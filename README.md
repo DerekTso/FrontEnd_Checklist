@@ -36,6 +36,8 @@
 - [Javascript高阶 - Vue_Mixin](docs/js_advanced/Vue_Mixin.md)
 - [Javascript高阶 - Vue_Component_Communication](docs/js_advanced/Vue_Component_Communication.md)
 - [Javascript高阶 - Vue_Directives](docs/js_advanced/Vue_Directives.md)
+- [Javascript高阶 - Vue_Plugins](docs/js_advanced/Vue_Plugins.md)
+
 
 ### HTML5 / CSS3
 
