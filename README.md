@@ -15,6 +15,7 @@
 - [Javascript基础 - 防抖和节流](docs/js_beginner/debounce_throttle.md)
 - [Javascript基础 - ES6之Proxy](docs/js_beginner/es6_proxy.md)
 - [Javascript基础 - defineProperty与proxy](docs/js_beginner/defineProperty与proxy.md)
+- [Javascript基础 - 事件监听器之Passive](docs/js_beginner/eventListener_passive.md)
 
 ### Javascript Intermediate
 
