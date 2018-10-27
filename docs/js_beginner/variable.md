@@ -6,7 +6,7 @@
 - [函数提升(Function hoisting)](#函数提升function-hoisting)
 - [let 约束了变量提升](#let-约束了变量提升)
 - [let 块级作用域](#let-块级作用域)
-- [let 有暂时性死区](#let-有暂时性死区)
+- [let 有暂时性死区](#let-有暂时性死区Temporal-Dead-Zone)
 - [let 禁止重复声明变量](#let-禁止重复声明变量)
 - [let 不会成为全局对象的属性](#let-不会成为全局对象的属性)
 - [const变量声明时必须初始化](#const变量声明时必须初始化)
@@ -174,6 +174,14 @@ console.log( typeof a); // undefined
 
 console.log( typeof a); // ReferenceError: a is not defined
 let a=10;
+
+// const and let only exist in the blocks they are defined in
+{
+  let a = 1;
+  const b = 1;
+}
+console.log(a); // ReferenceError
+console.log(b); // ReferenceError
 ```
 
 ### let 禁止重复声明变量
