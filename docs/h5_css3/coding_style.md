@@ -36,6 +36,7 @@
 - [JS规范](#js规范)
     - [命名规范](#命名规范)
     - [代码格式](#代码格式)
+    - [Airbnb JavaScript Style Guide](#Airbnb-JavaScript-Style-Guide)
 
 ### HTML规范
 
@@ -643,3 +644,463 @@ selectors{
 2. 对于代码块，始终用大括号包裹
 3. 所有的语句必须用分号结尾
 4. 所有的代码块不得使用分号结尾
+
+#### Airbnb JavaScript Style Guide
+
+```
+// creating objects with dynamic property names
+function getKey(k) {
+  return `a key named ${k}`;
+}
+const obj = {
+  id: 5,
+  name: 'San Francisco',
+  [getKey('enabled')]: true,
+};
+```
+
+```
+// Use object method shorthand
+const atom = {
+  value: 1,
+  addValue(value) {
+    return atom.value + value;
+  },
+};
+```
+
+```
+// Object.prototype methods, such as hasOwnProperty, propertyIsEnumerable, and isPrototypeOf
+// bad
+console.log(object.hasOwnProperty(key));
+// good
+console.log(Object.prototype.hasOwnProperty.call(object, key));
+```
+
+```
+// Prefer the object spread operator over Object.assign to shallow-copy objects
+const original = { a: 1, b: 2 };
+const copy = { ...original, c: 3 }; // copy => { a: 1, b: 2, c: 3 }
+const { a, ...noA } = copy; // noA => { b: 2, c: 3 }
+```
+
+```
+// Use array spreads ... to copy arrays
+const itemsCopy = [...items];
+
+// Use spread operator to convert an iterable object to an array
+const nodes = [...foo];
+```
+
+```
+// Use Array.from for converting an array-like object to an array
+const arr = Array.from(arrLike);
+
+// Use Array.from instead of spread ... for mapping over iterables
+// bad
+const baz = [...foo].map(bar);
+// good
+const baz = Array.from(foo, bar);
+```
+
+```
+// Never use arguments, opt to use rest syntax ... instead
+function concatenateAll(...args) {
+  return args.join('');
+}
+
+// Use default parameter syntax rather than mutating function arguments
+// bad
+function handleThings(opts) {
+  if (opts === void 0) {
+    opts = {};
+  }
+  // ...
+}
+
+// good
+function handleThings(opts = {}) {
+  // ...
+}
+```
+
+```
+// Never mutate parameters
+// bad
+function f1(obj) {
+  obj.key = 1;
+}
+// good
+function f2(obj) {
+  const key = Object.prototype.hasOwnProperty.call(obj, 'key') ? obj.key : 1;
+}
+
+// Never reassign parameters
+// bad
+function f1(a) {
+  a = 1;
+  // ...
+}
+// good
+function f3(a) {
+  const b = a || 1;
+  // ...
+}
+```
+
+```
+// Do not export mutable bindings
+// bad
+let foo = 3;
+export { foo };
+// good
+const foo = 3;
+export { foo };
+```
+
+```
+// In modules with a single export, prefer default export over named export
+// bad
+export function foo() {}
+// good
+export default function foo() {}
+```
+
+```
+// Use map() / every() / filter() / find() / findIndex() / reduce() / some() / ... to iterate over arrays, , and Object.keys() / Object.values() / Object.entries() to produce arrays so you can iterate over objects, instead of loops like for-in or for-of
+
+const numbers = [1, 2, 3, 4, 5];
+// bad
+let sum = 0;
+for (let num of numbers) {
+  sum += num;
+}
+// best (use the functional force)
+const sum = numbers.reduce((total, num) => total + num, 0);
+```
+
+```
+// Use exponentiation operator ** when calculating exponentiations
+// bad
+const binary = Math.pow(2, 10);
+// good
+const binary = 2 ** 10;
+```
+
+```
+// Don’t chain variable assignments
+// bad
+(function example() {
+  // JavaScript interprets this as
+  // let a = ( b = ( c = 1 ) );
+  // The let keyword only applies to variable a; variables b and c become
+  // global variables.
+  let a = b = c = 1;
+}());
+console.log(a); // throws ReferenceError
+console.log(b); // 1
+console.log(c); // 1
+
+// good
+(function example() {
+  let a = 1;
+  let b = a;
+  let c = a;
+}());
+console.log(a); // throws ReferenceError
+console.log(b); // throws ReferenceError
+console.log(c); // throws ReferenceError
+// the same applies for `const`
+```
+
+```
+// Avoid using unary increments and decrements (++, --)
+// bad
+const array = [1, 2, 3];
+let num = 1;
+num++;
+
+// good
+const array = [1, 2, 3];
+let num = 1;
+num += 1;
+```
+
+```
+// If your assignment violates max-len, surround the value in parens
+// bad
+const foo
+  = 'superLongLongLongLongLongLongLongLongString';
+// good
+const foo = (
+  superLongLongLongLongLongLongLongLongFunctionName()
+);
+```
+
+```
+// var declarations get hoisted to the top of their closest enclosing function scope, their assignment does not
+
+function example() {
+  console.log(notDefined); // => throws a ReferenceError
+}
+
+// creating a variable declaration after you
+// reference the variable will work due to
+// variable hoisting. Note: the assignment
+// value of `true` is not hoisted.
+function example() {
+  console.log(declaredButNotAssigned); // => undefined
+  var declaredButNotAssigned = true;
+}
+
+// the interpreter is hoisting the variable
+// declaration to the top of the scope,
+// which means our example could be rewritten as:
+function example() {
+  let declaredButNotAssigned;
+  console.log(declaredButNotAssigned); // => undefined
+  declaredButNotAssigned = true;
+}
+
+// using const and let
+function example() {
+  console.log(declaredButNotAssigned); // => throws a ReferenceError
+  console.log(typeof declaredButNotAssigned); // => throws a ReferenceError
+  const declaredButNotAssigned = true;
+}
+```
+
+```
+// Anonymous function expressions hoist their variable name, but not the function assignment
+function example() {
+  console.log(anonymous); // => undefined
+
+  anonymous(); // => TypeError anonymous is not a function
+
+  var anonymous = function () {
+    console.log('anonymous function expression');
+  };
+}
+```
+
+```
+// Function declarations hoist their name and the function body
+function example() {
+  superPower(); // => Flying
+
+  function superPower() {
+    console.log('Flying');
+  }
+}
+```
+
+```
+// Use shortcuts for booleans, but explicit comparisons for strings and numbers
+// bad
+if (isValid === true) {
+  // ...
+}
+// good
+if (isValid) {
+  // ...
+}
+
+// bad
+if (name) {
+  // ...
+}
+// good
+if (name !== '') {
+  // ...
+}
+
+// bad
+if (collection.length) {
+  // ...
+}
+// good
+if (collection.length > 0) {
+  // ...
+}
+```
+
+```
+// Use braces to create blocks in case and default clauses that contain lexical declarations (e.g. let, const, function, and class)
+
+switch (foo) {
+  case 1: {
+    let x = 1;
+    break;
+  }
+  case 2: {
+    const y = 2;
+    break;
+  }
+  case 3: {
+    function f() {
+      // ...
+    }
+    break;
+  }
+  case 4:
+    bar();
+    break;
+  default: {
+    class C {}
+  }
+}
+```
+
+```
+// Requiring operators at the beginning of the line keeps the operators aligned and follows a pattern similar to method chaining.
+// This also improves readability by making it easier to visually follow complex logic
+
+// good
+if (
+  foo === 123
+  && bar === 'abc'
+) {
+  thing1();
+}
+
+// good
+if (
+  (foo === 123 || bar === 'abc')
+  && doesItLookGoodWhenItBecomesThatLong()
+  && isThisReallyHappening()
+) {
+  thing1();
+}
+```
+
+```
+// Place 1 space before the opening parenthesis in control statements (if, while etc.)
+// Place no space between the argument list and the function name in function calls and declarations
+if (isJedi) {
+  fight();
+}
+function fight() {
+  console.log('Swooosh!');
+}
+```
+
+```
+// Do not add spaces inside parentheses
+// bad
+if ( foo ) {
+  console.log(foo);
+}
+// good
+if (foo) {
+  console.log(foo);
+}
+
+// Do not add spaces inside brackets
+// bad
+const foo = [ 1, 2, 3 ];
+console.log(foo[ 0 ]);
+// good
+const foo = [1, 2, 3];
+console.log(foo[0]);
+
+// Add spaces inside curly braces
+// bad
+const foo = {clark: 'kent'};
+// good
+const foo = { clark: 'kent' };
+```
+
+```
+// Additional trailing comma
+// This leads to cleaner git diffs. Also, transpilers like Babel will remove the additional trailing comma in the transpiled code
+// which means you don’t have to worry about the trailing comma problem in legacy browsers
+
+// bad - git diff without trailing comma
+const hero = {
+     firstName: 'Florence',
+-    lastName: 'Nightingale'
++    lastName: 'Nightingale',
++    inventorOf: ['coxcomb chart', 'modern nursing']
+};
+
+// good - git diff with trailing comma
+const hero = {
+     firstName: 'Florence',
+     lastName: 'Nightingale',
++    inventorOf: ['coxcomb chart', 'modern nursing'],
+};
+
+
+// bad
+function createHero(
+  firstName,
+  lastName,
+  inventorOf
+) {
+  // does nothing
+}
+
+// good
+function createHero(
+  firstName,
+  lastName,
+  inventorOf,
+) {
+  // does nothing
+}
+
+// good (note that a comma must not appear after a "rest" element)
+function createHero(
+  firstName,
+  lastName,
+  inventorOf,
+  ...heroArgs
+) {
+  // does nothing
+}
+```
+
+```
+// Type Casting & Coercion
+
+const totalScore = String(this.reviewScore);
+
+const val = Number(inputValue);
+const val = parseInt(inputValue, 10);
+
+const hasAge = Boolean(age);
+const hasAge = !!age;
+```
+
+```
+// Use camelCase when you export-default a function
+function makeStyleGuide() {
+  // ...
+}
+export default makeStyleGuide;
+
+// Use PascalCase when you export a constructor / class / singleton / function library / bare object
+const AirbnbStyleGuide = {
+  es6: {
+  },
+};
+export default AirbnbStyleGuide;
+```
+
+```
+// Acronyms and initialisms should always be all capitalized, or all lowercased
+
+// bad
+import SmsContainer from './containers/SmsContainer';
+// bad
+const HttpRequests = [
+  // ...
+];
+
+// good
+import SMSContainer from './containers/SMSContainer';
+// good
+const HTTPRequests = [
+  // ...
+];
+```
