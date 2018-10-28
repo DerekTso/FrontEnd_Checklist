@@ -22,6 +22,7 @@
 - [Javascript进阶 - 前端缓存](docs/js_intermediate/cache.md)
 - [Javascript进阶 - 图片懒加载](docs/js_intermediate/imageLazyLoad.md)
 - [Javascript进阶 - 性能优化](docs/js_intermediate/optimization.md)
+- [Javascript进阶 - 浏览器兼容性](docs/js_intermediate/browser_compatibility.md)
 
 ### Javascript Advacned
 
