@@ -10,8 +10,11 @@
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
 - [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
-- [如何理解 V8 引擎字节码?](#q-如何理解-V8-引擎字节码?)
-
+- [Q: 如何理解 V8 引擎字节码?](#q-如何理解-V8-引擎字节码?)
+- [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
+- [Q: WebStorage 和 Cookie 的区别](#q-WebStorage-和-Cookie-的区别)
+- [Q: sessionStorage 和 localStorage 的区别](#q-sessionStorage-和-localStorage-的区别)
+- 
 ### 服务器相关
 
 - [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
@@ -155,6 +158,32 @@ Function.prototype.myApply = function (context) {
 3. 解释器 Ignition 根据语法树生成字节码
 4. TurboFan 是 V8 的优化编译器，TurboFan 将字节码生成优化的机器代码
 ![interview_basic_v8_bytecode](../../images/interview_basic_v8_bytecode.png)
+
+### Q: cookie的主要应用场景
+
+1. 保持登录
+2. 保持上次查看的页面
+3. 浏览计数
+4. 广告追踪
+5. 购物车的状态保持
+
+### Q: WebStorage 和 Cookie 的区别
+
+1. cookie安全性问题(CSRF)
+2. cookie会在http请求中传送，浪费带宽
+3. cookie只有4kb，而webStorage有平均5mb的本地存储
+4. cookie根据expires设置过期时间
+5. cookie在同源下只要没过期就会一直共享，localStorage在同源中没被删除情况也会共享，sessionStorage在窗口关闭之前在同一个窗口同源下才能共享
+
+### Q: sessionStorage 和 localStorage 的区别
+
+1. 在 html5 中 WebStorage 包括两种存储方式```sessionStorage``` 和 ```localStorage```
+2. sessionStorage是非持久化的本地存储，用于存储一个会话(session)中的数据，并且当会话结束后数据也随之销毁
+3. localstorage是持久化的本地存储，除非主动删除数据，否则数据是永远也不过期的
+4. localstorage和sessionStorage都具有相同的操作方法，例如setItem,getItem, clear和removeItem等
+5. 对于object对象可以用JSON.stringfy进行转化然后存储，用的时候利用JSON.parse转化回来使用
+6. 对于图片存储我们可以将图片转化为DataURI格式进行存储；具体转化方式可以借用canvas提供的toDataURL
+7. 对于webstorage本地存储各浏览器支持也是不同，平均对每个源分配的存储大小大约5M
 
 ---
 
