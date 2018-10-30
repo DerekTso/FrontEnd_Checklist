@@ -9,6 +9,7 @@
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
+- [Q: 如何理解箭头函数中的this](#q-如何理解箭头函数中的this)
 - [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
 - [Q: 如何理解 V8 引擎字节码?](#q-如何理解-V8-引擎字节码?)
 - [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
@@ -20,6 +21,8 @@
 - [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
 - [Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？](#q-在浏览器地址栏键入url按下回车之后会发生什么)
 - [Q: 将静态资源放在其他域名的目的是什么？](#q-将静态资源放在其他域名的目的是什么)
+- [Q: CORS(跨域资源共享)](#q-CORS跨域资源共享)
+- [Q: postMessage解决跨域和跨页面通信的问题](#q-postMessage解决跨域和跨页面通信的问题)
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
 - [Q: 前端渲染与后端渲染](#q-前端渲染与后端渲染)
@@ -29,13 +32,15 @@
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
-- [Q: relative 和 absolute 分别是相对于谁进行定位的？](#q-relative-和-absolute-分别是相对于谁进行定位的)
+- [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?](#q-html5-行内元素有哪些块级元素有哪些空元素有哪些?)
 - [Q: HTML5 有哪些新特性?](#q-HTML5-有哪些新特性?)
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
-- [Q: 什么是css盒模型](#q-什么是-css-盒模型?)
-
+- [Q: 什么是css盒模型?](#q-什么是-css-盒模型?)
+- [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
+- [Q: 如何居中布局?](#q-如何居中布局?)
+- 
 ### 面试问题
 
 1. 问清楚公司做的什么产品，以后的发展方向
@@ -126,6 +131,17 @@ Function.prototype.myCall = function (context) {
 }
 ```
 
+### Q: 如何理解箭头函数中的this
+
+1. 传统函数的 this 是动态的。它取决于 this 怎样被调用
+2. 箭头函数的 this 是静态的。它是一个词法（lexical ）上的值，它取决于 this 在哪个作用域中定义
+3. 用 ```call()``` 或者 ```apply()``` 调用箭头函数时，无法对 this 进行绑定，即传入的第一个参数被忽略
+4. 由于箭头函数没有 [[Construct]] 内部方法，因此，它将不能用作构造函数。如果使用了 new 关键字创建新的函数，则会抛出错误
+5. ```const value = () => foo()```解释为```const value = () => (foo())```
+6. ```var func = () => ({foo: 1}); // Object对象要做个括号```
+7. ```callback = callback || () => {}; // SyntaxError: invalid arrow-function arguments```
+8. ```callback = callback || (() => {}); // ok```
+
 ### Q: 如何实现一个 apply 函数
 
 ```
@@ -209,6 +225,133 @@ Function.prototype.myApply = function (context) {
 
 1. 在请求这些静态资源的时候不会发送 cookie，节省了流量（ cookie 是会发送给子域名/二级域名的，所以这些静态资源要放在一个单独的主域名下）
 2. 浏览器对于一个域名会有请求数的限制，这种方法可以方便做CDN
+
+### Q: CORS(跨域资源共享)
+
+CORS(Cross-Origin Resource Sharing)允许浏览器向跨源(协议 + 域名 + 端口)服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制
+ 
+* 配置项解释
+
+Access-Control-Allow-Origin
+Access-Control-Allow-Methods
+Access-Control-Expose-Headers
+Access-Control-Allow-Credentials
+Access-Control-Max-Age
+
+### Q: postMessage解决跨域和跨页面通信的问题
+
+* postMessage
+
+postMessage是html5引入的API，允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递
+
+postMessage(data,origin) // 如果要指定和当前窗口同源的话，origin设置为"/"
+
+* MessageEvent的属性
+
+1. data：传递来的message
+2. source：发送消息的窗口对象
+3. origin：发送消息窗口的源（协议+主机+端口号）
+
+```
+// 同域父子页面间通讯
+// 父页面a.html:
+
+//> localhost:9011/a.html
+<h1 class="header">page A</h1>
+<div class="mb20">
+    <textarea name="ta" id="data" cols="30" rows="5">hello world</textarea>
+    <button style="font-size:20px;" onclick="send()">post message</button>
+</div>
+<!-- 不跨域的情况 -->
+<iframe src="b.html" id="child" style="display: block; border: 1px dashed #ccc; height: 300px;"></iframe>
+
+<script>
+function send() {
+    var data = document.querySelector('#data').value;
+    window.frames[0].postMessage(data, '/'); // 触发同域子页面的message事件
+    //window.frames[0].postMessage(data, 'http://localhost:9022/'); // 触发跨域子页面的messag事件
+}
+
+// 当前页面执行 window.postMessage(..)
+// 或子页面执行 parent.postMessage(...) 都会触发下面的回调
+// 只是messageEvent.source不同而已
+window.addEventListener('message', function(messageEvent) {
+    var data = messageEvent.data;
+    console.info('message from child:', data);
+}, false);
+</script>
+
+子页面b.html
+
+//> localhost:9011/b.html
+<h1 class="header">page B</h1>
+
+<input type="text" id="inp" value="some contents..">
+<button onclick="send()">send</button>
+
+<script>
+window.addEventListener('message', function(ev) {
+    // if (ev.source !== window.parent) {return;}
+    var data = ev.data;
+    console.info('message from parent:', data);
+}, false);
+
+function send() {
+    var data = document.querySelector('#inp').value;
+    // window.postMessage(data, '*'); // 触发当前页面的message事件
+    parent.postMessage(data, '*'); // 触发父页面的message事件
+    // parent.postMessage(data, 'http://localhost:9011/'); // 若父页面的域名和指定的不一致，则postMessage失败
+}
+</script>
+```
+
+```
+// 跨域父子页面间通讯
+// 父页面a.html:
+
+//> localhost:9011/a.html
+<h1 class="header">page A</h1>
+<div class="mb20">
+    <textarea name="ta" id="data" cols="30" rows="5">hello world</textarea>
+    <button style="font-size:20px;" onclick="send()">post message</button>
+</div>
+<!-- 跨域的情况 -->
+<iframe src="http://localhost:9022/b.html" id="child" style="display: block; border: 1px dashed #ccc; height: 300px;"></iframe>
+
+<script>
+function send() {
+    var data = document.querySelector('#data').value;
+    window.frames[0].postMessage(data, 'http://localhost:9022/'); // 触发跨域子页面的messag事件
+}
+
+window.addEventListener('message', function(messageEvent) {
+    var data = messageEvent.data; 
+    console.info('message from child:', data);
+}, false);
+</script>
+
+// 子页面b.html
+
+//> localhost:9022/b.html
+<h1 class="header">page B</h1>
+
+<input type="text" id="inp" value="some contents..">
+<button onclick="send()">send</button>
+
+<script>
+window.addEventListener('message', function(ev) {
+    // if (ev.source !== window.parent) {return;}
+    var data = ev.data;
+    console.info('message from parent:', data);
+}, false);
+
+function send() {
+    var data = document.querySelector('#inp').value;
+    parent.postMessage(data, 'http://localhost:9011/'); // 若父页面的域名和指定的不一致，则postMessage失败
+    // parent.postMessage(data, '*'); // 触发父页面的message事件
+}
+</script>
+```
 
 ### Q: 跨域问题
 
@@ -321,11 +464,54 @@ Function.prototype.myApply = function (context) {
 
 ### Q: relative 和 absolute 分别是相对于谁进行定位的？
 
-1. absolute: 相对于最近一级的定位不是 static 的父元素来进行定位
-2. fixed: 相对于浏览器窗口或 frame 进行定位
-3. relative: 相对于其在普通流中的位置进行定位
-4. static: 没有定位，元素出现在正常的流中
+1. absolute: 相对于最近一级的定位不是 static 的父元素来进行定位，如果没有，就是相对于根元素，有z-index属性，脱离正常文档流
+2. fixed: 相对于浏览器窗口或 frame 进行定位，是特殊的absolute，总是以body为定位对象的，即使拖动滚动条，元素的位置也是不会改变的，有z-index属性，脱离正常文档流
+3. relative: 相对于正常文档流中的位置进行定位，有z-index属性，relative的偏移是基于对象的margin的左上侧的
+4. static: 没有定位，元素出现在正常文档流中，top，right，bottom，left等属性不会被应用
 5. sticky: 容器的位置根据正常文档流计算得出
+
+* z-index
+
+1. z-index，又称为对象的层叠顺序，它用一个整数来定义堆叠的层次，整数值越大，则被层叠在越上面，这是指同级元素间的堆叠
+2. 如果两个对象的此属性具有同样的值，那么将依据它们在HTML文档中流的顺序层叠，写在后面的将会覆盖前面的
+3. 父子关系是无法用z-index来设定上下关系的，一定是子级在上父级在下
+4. 使用static 定位或无position定位的元素z-index属性是无效的
+
+* relative
+
+```
+<div id="parent">
+     <div id="sub1">sub1</id>
+     <div id="sub2">sub2</id>
+</div>
+
+#sub1
+{
+    position: relative;
+    top: 5px;
+    left: 5px;
+}
+
+1. relative属性是相对于元素本身的位置来进行偏移的
+2. 当设置sub1的position为relative后，它依然还在正常文档流中，占有文档空间，它将根据top，right，bottom，left的值按照它理应所在的位置进行偏移
+3. 此时sub2不会因为sub1增加了relative的属性而发生改变，如果sub1设置margin/padding，就会让sub1和sub2的文档空间产生偏移
+4. 如果此时把sub2的position也设置为relative后，它和sub1一样，按照它原来理应应在的位置进行偏移
+5. relative和static方式在最外层时是以<body>标签为定位原点的
+```
+
+* absolute
+
+```
+1. 当sub1的position设置为absolute后，sub1会溢出正常的文档流，如果此时parent也设置了position属性，且position的属性值为absolute或者relative时，sub1按照这个parent来进行定位
+2. 如果parent设定了margin，border，padding等属性，那么这个 定位点 将忽略padding，将会从padding开始的地方(即只从padding的左上角开始)进行定位，但并不会忽略margin和border，总结一下，就是absolute是根据祖先类的border进行定位的
+3. 此时sub2将获得sub1的位置（因为sub1溢出了正常的文档流，不在同一层，空出了位置），它的文档流不再基于sub1，而是直接从parent开始
+4. 如果设置了position为absolute的sub1不存在一个有着position属性的父对象，那么它就会以<html>作为原点定位
+5.  使用absoulte或fixed定位的话，必须指定 left、right、 top、 bottom 属性中的至少一个，否则left/right/top/bottom属性会使用它们的默认值 auto ，这将导致对象遵从正常的HTML布局规则，都变成relative，会占用文档空间，很多人使用absolute定位后发现没有脱离文档流就是这个原因
+6.  如果top和bottom一同存在的话，那么只有top生效
+7.  如果left和right一同存在的话，那么只有left生效
+8.  绝对(absolute)定位对象在可视区域之外会导致滚动条出现
+9.  相对(relative)定位对象在可视区域之外，滚动条不会出现
+```
 
 ### Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?
 
@@ -396,4 +582,35 @@ Function.prototype.myApply = function (context) {
 4. 在IE盒子模型中，width表示 content+padding+border 这三个部分的宽度
 5. CSS3中引入了 box-sizing 属性，box-sizing:content-box;表示标准的盒子模型，box-sizing:border-box;表示的是IE盒子模型
 
+### Q: 如何去除inline-block元素间距?
+
+1. 内联元素会被当做字体来处理的，字体之间是有间隔的，所以内联元素之间也是有间隔的
+2. 解决方法：在父级元素上设置属性```font-size:0```清除```display:inline-block```元素换行符间隙
+3. 重新设置子级元素的字体大小
+
+```
+<div style="font-size:0;">
+    <input type="text" name="" id="" value="">
+    <button>submit</button>
+</div>
+```
+
+### Q: 如何居中布局?
+
+* 水平居中
+
+1. 对body设置CSS内容居中样式text-align:center，```body{text-align:center}```
+2. 对最外层对象设置margin:0 auto样式，```.horizonal-div{margin:0 auto}```
+
+* 垂直居中
+
+1. 只需要设置line-height与height高度相同
+```
+.verticle-div{
+  height: 30px;
+  line-height: 30px;
+}
+```
+
 ---
+
