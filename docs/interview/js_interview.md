@@ -15,7 +15,8 @@
 
 ### JavaScript 相关
 
-- [典型的JavaScript面试题](#典型的JavaScript面试题)
+- [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
+- [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
@@ -36,6 +37,22 @@
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
 - [Q: 前端渲染与后端渲染](#q-前端渲染与后端渲染)
+
+
+### Q: mouseover 和 mouseenter 的区别
+
+1. mouseover: 当鼠标移入元素或其子元素都会触发事件，所以有一个重复触发，冒泡的过程。对应的移除事件是mouseout
+
+2. mouseenter: 当鼠标移入元素本身（不包含元素的子元素）会触发事件，也就是不会冒泡，对应的移除事件是mouseleave
+
+### Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别
+
+1. 与 setTimeout 和 setInterval 不同，requestAnimationFrame 不需要设置时间间隔
+2. requestAnimationFrame 采用的是系统时间间隔，不会因为前面的任务而受到影响
+3. setTimeout 和 setInterval 真正运行时的时间间隔会因为前面的任务而受到影响
+4. requestAnimationFrame 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率
+5. 在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的CPU、GPU和内存使用量
+6. requestAnimationFrame 是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销
 
 ### Q: 如何实现一个 bind 函数
 
