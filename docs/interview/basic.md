@@ -40,6 +40,7 @@
 - [Q: 什么是css盒模型?](#q-什么是-css-盒模型?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
 - [Q: 如何居中布局?](#q-如何居中布局?)
+- [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
 - 
 ### 面试问题
 
@@ -612,5 +613,94 @@ function send() {
 }
 ```
 
+* translate
+
+```
+transform: translate(x轴平移，y轴平移)
+transform: translateX(xxx)
+transform: translateY(yyy)
+transform: translateZ(zzz)
+如果只设置transform: translate(xxx)，那么只会在 X轴 进行平移
+
+div {
+  transform: translate(50px,100px);
+  -ms-transform: translate(50px,100px);		/* IE 9 */
+  -webkit-transform: translate(50px,100px);	/* Safari and Chrome */
+  -o-transform: translate(50px,100px);		/* Opera */
+  -moz-transform: translate(50px,100px);		/* Firefox */
+}
+
+```
+
+**注意**：translate平移之后不会将正常文档流中的元素挤开
+
+* translate(-50%,-50%)实现居中
+
+```
+<!--html-->
+<body>
+<div>这是用来测试的</div>
+</body>
+
+/*CSS*/
+div{
+  position:absolute;
+  top:50%;
+  left:50%;
+  border-radius: 5px;
+  -webkit-transform:translate(-50%, -50%);
+     -moz-transform:translate(-50%, -50%);
+          transform:translate(-50%, -50%);
+}
+// translate(x,y) 括号的百分比数据，会以 本身的宽高 做参考
+// 比如，本身的宽为100px，高为100px. 那填(50%,50%)就是向右，向下移动50px，添加负号就是向着相反的方向移动
+```
+
+### Q: 如何实现绝对居中布局?
+
+* 已知div块的宽度和高度
+
+```
+// 用负margin等于宽高的一半来进行居中
+div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
+}
+```
+
+```
+// 用margin:auto来进行居中
+div {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+```
+
+* 不知道要进行绝对居中的元素的宽度和高度
+
+```
+div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform:translate(-50%, -50%);
+     -moz-transform:translate(-50%, -50%);
+          transform:translate(-50%, -50%);
+}
+```
+
 ---
+
+
 
