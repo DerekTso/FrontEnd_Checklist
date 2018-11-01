@@ -2,17 +2,72 @@
 
 ## 目录
 
-- [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
-- [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?](#q-html5-行内元素有哪些块级元素有哪些空元素有哪些?)
 - [Q: HTML5 有哪些新特性?](#q-HTML5-有哪些新特性?)
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
+- [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
+- [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
 - [Q: 如何理解CSS中的display属性?](#q-如何理解CSS中的display属性?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
 - [Q: 如何居中布局?](#q-如何居中布局?)
 - [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
+- [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
+
+### Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?
+
+1. 行内元素有：a、span、button、input、select、textarea、i、em、strong
+2. 块级元素
+    - 2.1. 布局类: div、section、header、footer、aside、nav、article等
+    - 2.2. 列表类: ul、li、ol
+    - 2.3. form、p、table、标题h1~h6
+3. 空元素: br、hr
+
+### Q: HTML5 有哪些新特性?
+
+1. 语义化标签: header、footer、nav、aside、article、section 等
+2. 增强表单: 为 input 增加 color、email、date、range 等类型
+3. 存储方面: 提供了 sessionStorage 、localStorage 和离线存储
+4. 多媒体方面: 规定了音频和视频元素audio和video
+5. 还有地理定位、canvas画布、拖放、多线程编程的 web workers 和 websocket 协议
+
+### Q: HTML5 的存储方案有哪些?
+
+1. HTML5提供了 sessionStorage、localStorage 和 离线存储
+2. sessionStorage 和 localStorage 都是采用键值对的形式存储，通过 setItem、getItem、removeItem 来实现增删查改
+3. sessionStorage 是会话存储，当浏览器关闭之后，自动清空
+4. localStorage 没有时间上的限制，当浏览器关闭之后，不会自动清空
+5. 离线存储用来确保 web 应用能够在离线情况下使用，通过在html标签中属性manifest来声明需要缓存的文件
+6. manifest 文件声明的缓存文件可在初次加载后缓存在客户端，可以通过更新这个 manifest 文件来达到更新缓存文件的目的
+
+### Q: native页面和H5页面的区别
+
+* native页面
+
+优势：
+1. 运行速度比较快
+2. 能使用设备的底层功能，如摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等
+3. 在界面设计、功能模块、操作逻辑等层面相较 web 更易做到 App 的便捷性和舒适性，功能更加强大
+4. 节省流量
+
+劣势：
+1. 不同的操作系统（如 Android 和 iOS）需要独立的进行开发
+2. 每次有更新，都需要重新打包一次发布到应用平台上，且每次要向各个应用商店进行提交审核。之后用户需要手动进行点击更新安装（安装成本较高）
+3. 开发成本比较高，尤其需要适配各种机型时（如 Android 应用，需要适配各种 Android 手机）
+
+* H5 页面
+
+优势：
+1. 由于是运行在浏览器上，所以只需要开发一次便可以在不同的操作系统上显示
+2. 迭代版本时，不需要打包便可以发布（实时更新、快速迭代），与云端实现实时数据交互
+3. 开发成本相对较低，对浏览器的适配较简单，且发布门槛相对较低
+
+劣势：
+1. 每次打开页面，都得重新加载，获取数据
+2. 过于依赖网络，速度无法保证。特别在弱网环境下，不仅耗费流量而且加载缓慢，就算是 WiFi 情况下也不容乐观
+3. 只能使用有限的设备底层功能（无法使用摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等功能）
+4. 仍处于发展阶段，部分功能无法在基于现有技术的浏览器基础上实现，且无法全面的显示最完美的用户体验，只能用现有技术去弥去找最佳解决方案
 
 ### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
 
@@ -107,60 +162,6 @@
 8.  绝对(absolute)定位对象在可视区域之外会导致滚动条出现
 9.  相对(relative)定位对象在可视区域之外，滚动条不会出现
 ```
-
-### Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?
-
-1. 行内元素有：a、span、button、input、select、textarea、i、em、strong
-2. 块级元素
-    - 2.1. 布局类: div、section、header、footer、aside、nav、article等
-    - 2.2. 列表类: ul、li、ol
-    - 2.3. form、p、table、标题h1~h6
-3. 空元素: br、hr
-
-### Q: HTML5 有哪些新特性?
-
-1. 语义化标签: header、footer、nav、aside、article、section 等
-2. 增强表单: 为 input 增加 color、email、date、range 等类型
-3. 存储方面: 提供了 sessionStorage 、localStorage 和离线存储
-4. 多媒体方面: 规定了音频和视频元素audio和video
-5. 还有地理定位、canvas画布、拖放、多线程编程的 web workers 和 websocket 协议
-
-### Q: HTML5 的存储方案有哪些?
-
-1. HTML5提供了 sessionStorage、localStorage 和 离线存储
-2. sessionStorage 和 localStorage 都是采用键值对的形式存储，通过 setItem、getItem、removeItem 来实现增删查改
-3. sessionStorage 是会话存储，当浏览器关闭之后，自动清空
-4. localStorage 没有时间上的限制，当浏览器关闭之后，不会自动清空
-5. 离线存储用来确保 web 应用能够在离线情况下使用，通过在html标签中属性manifest来声明需要缓存的文件
-6. manifest 文件声明的缓存文件可在初次加载后缓存在客户端，可以通过更新这个 manifest 文件来达到更新缓存文件的目的
-
-### Q: native页面和H5页面的区别
-
-* native页面
-
-优势：
-1. 运行速度比较快
-2. 能使用设备的底层功能，如摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等
-3. 在界面设计、功能模块、操作逻辑等层面相较 web 更易做到 App 的便捷性和舒适性，功能更加强大
-4. 节省流量
-
-劣势：
-1. 不同的操作系统（如 Android 和 iOS）需要独立的进行开发
-2. 每次有更新，都需要重新打包一次发布到应用平台上，且每次要向各个应用商店进行提交审核。之后用户需要手动进行点击更新安装（安装成本较高）
-3. 开发成本比较高，尤其需要适配各种机型时（如 Android 应用，需要适配各种 Android 手机）
-
-* H5 页面
-
-优势：
-1. 由于是运行在浏览器上，所以只需要开发一次便可以在不同的操作系统上显示
-2. 迭代版本时，不需要打包便可以发布（实时更新、快速迭代），与云端实现实时数据交互
-3. 开发成本相对较低，对浏览器的适配较简单，且发布门槛相对较低
-
-劣势：
-1. 每次打开页面，都得重新加载，获取数据
-2. 过于依赖网络，速度无法保证。特别在弱网环境下，不仅耗费流量而且加载缓慢，就算是 WiFi 情况下也不容乐观
-3. 只能使用有限的设备底层功能（无法使用摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等功能）
-4. 仍处于发展阶段，部分功能无法在基于现有技术的浏览器基础上实现，且无法全面的显示最完美的用户体验，只能用现有技术去弥去找最佳解决方案
 
 ### Q: 什么是 CSS 盒模型?
 
@@ -399,4 +400,32 @@ div {
 }
 ```
 
+### Q: 如何用纯css实现小箭头?
 
+三角形原理：一个高宽相等的正方形，选取你所需要的某一边，截取出来的是一个梯形，当高宽都为0，且其他边为透明颜色时，一个三角形就出来了
+
+```
+width:0;
+height:0;
+border: 10px solid transparent;
+border-left-color: orange; // 向右的箭头
+```
+
+三角线箭头原理：设置两个伪类，前一个伪类覆盖至另一个了伪类，留出一些线出来就好
+
+```
+.arrow:after,
+.arrow:before {
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-left-color: orange;
+    position: absolute;
+    content: "";
+}
+.arrow:before{
+    top: 0;
+    left: 70px; // 根据实际情况调整
+    border-left-color: white;
+}
+```
