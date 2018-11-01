@@ -15,6 +15,7 @@
 
 ### JavaScript 相关
 
+- [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
@@ -37,6 +38,52 @@
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
 - [Q: 前端渲染与后端渲染](#q-前端渲染与后端渲染)
+
+### Q: Undefined 和 Null 的区别
+
+* Null
+
+1. ```typeof null == 'object'```
+2. ```Object.prototype.toString.call(null) ; // [object Null]```
+3. ```undefined == null; //true```
+4. ```undefined === null; //false```
+5. ```Number(null); // 0```
+6. 如果需要释放某个对象(垃圾回收)，就将其设置为null
+7. 对于参数默认值来说，如果传入 undefined 的话就会使用默认值，但是如果传入 null 的话就不会使用默认值
+
+* Undefined
+
+1. ```typeof undefined == 'undefined'```
+2. ```Object.prototype.toString.call(undefined) ; // [object Undefined]```
+3. ```Number(undefined); // NaN```
+4. 声明了一个变量，但没有赋值
+```
+var foo;
+console.log(foo); //undefined
+```
+
+5. 访问对象上不存在的属性
+```
+console.log(Object.foo); // undefined
+```
+
+6. 函数定义了形参，但没有传递实参
+```
+//函数定义了形参 a
+function fn(a) {
+    console.log(a); //undefined
+}
+fn(); //未传递实参
+```
+
+7. 使用 void 对表达式求值
+```
+void 0 ; // undefined
+void false; //undefined
+void []; //undefined
+void null; //undefined
+void function fn(){} ; //undefined
+```
 
 
 ### Q: mouseover 和 mouseenter 的区别
