@@ -23,17 +23,17 @@
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
 - [Q: 如何理解箭头函数中的this](#q-如何理解箭头函数中的this)
 - [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
-- [Q: 如何理解 V8 引擎字节码?](#q-如何理解-V8-引擎字节码?)
 - [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
 - [Q: WebStorage 和 Cookie 的区别](#q-WebStorage-和-Cookie-的区别)
 - [Q: sessionStorage 和 localStorage 的区别](#q-sessionStorage-和-localStorage-的区别)
+- [Q: 如何理解 V8 引擎字节码](#q-如何理解-V8-引擎字节码)
 
 ### 服务器相关
 
 - [Q: 从输入URL到页面加载发生了什么？](#q-从输入url到页面加载发生了什么)
 - [Q: 在浏览器地址栏键入URL，按下回车之后会发生什么？](#q-在浏览器地址栏键入url按下回车之后会发生什么)
 - [Q: 将静态资源放在其他域名的目的是什么？](#q-将静态资源放在其他域名的目的是什么)
-- [Q: CORS(跨域资源共享)](#q-CORS跨域资源共享)
+- [Q: CORS(跨源资源共享)](#q-CORS跨源资源共享)
 - [Q: postMessage解决跨域和跨页面通信的问题](#q-postMessage解决跨域和跨页面通信的问题)
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
@@ -186,14 +186,6 @@ Function.prototype.myApply = function (context) {
 4. window.onload 是在DOM树加载完以及所有文件加载完成才执行，因此慢于document.ready
 5. 当页面文档加载并解析完毕之后会马上触发 DOMContentLoaded 事件，而不会等待样式文件、图片文件和子框架页面的加载
 
-### Q: 如何理解 V8 引擎字节码?
-
-1. 当 V8 编译 JavaScript 代码时，解析器(parser)将生成一个抽象语法树
-2. 语法树是 JavaScript 代码的句法结构的树形表示形式
-3. 解释器 Ignition 根据语法树生成字节码
-4. TurboFan 是 V8 的优化编译器，TurboFan 将字节码生成优化的机器代码
-![interview_basic_v8_bytecode](../../images/interview_basic_v8_bytecode.png)
-
 ### Q: cookie的主要应用场景
 
 1. 保持登录
@@ -220,6 +212,14 @@ Function.prototype.myApply = function (context) {
 6. 对于图片存储我们可以将图片转化为DataURI格式进行存储；具体转化方式可以借用canvas提供的toDataURL
 7. 对于webstorage本地存储各浏览器支持也是不同，平均对每个源分配的存储大小大约5M
 
+### Q: 如何理解 V8 引擎字节码
+
+1. 当 V8 编译 JavaScript 代码时，解析器(parser)将生成一个抽象语法树
+2. 语法树是 JavaScript 代码的句法结构的树形表示形式
+3. 解释器 Ignition 根据语法树生成字节码
+4. TurboFan 是 V8 的优化编译器，TurboFan 将字节码生成优化的机器代码
+![interview_basic_v8_bytecode](../../images/interview_basic_v8_bytecode.png)
+
 ---
 
 ### Q: 从输入URL到页面加载发生了什么？
@@ -245,7 +245,7 @@ Function.prototype.myApply = function (context) {
 1. 在请求这些静态资源的时候不会发送 cookie，节省了流量（ cookie 是会发送给子域名/二级域名的，所以这些静态资源要放在一个单独的主域名下）
 2. 浏览器对于一个域名会有请求数的限制，这种方法可以方便做CDN
 
-### Q: CORS(跨域资源共享)
+### Q: CORS(跨源资源共享)
 
 CORS(Cross-Origin Resource Sharing)允许浏览器向跨源(协议 + 域名 + 端口)服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制
  
@@ -375,11 +375,17 @@ function send() {
 ### Q: 跨域问题
 
 1. 浏览器的同源策略导致了跨域
-2. 用于隔离潜在恶意文件的重要安全机制
-3. jsonp ，允许 script 加载第三方资源
-4. nginx 反向代理（nginx 服务内部配置 Access-Control-Allow-Origin *）
-5. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
-6. iframe 嵌套通讯，postmessage
+2. 跨域是一种安全机制，用于隔离潜在恶意文件
+3. 解决跨域的方法
+    1. jsonp: 由于jsonp请求是通过script的方式发送的（只有xhr的请求方式才有可能产生跨域问题），所以不会产生跨域问题。前台使用ajax的get请求，将dataType设为"jsonp"；使用jsonp的弊端: 只能使用get方式请求，服务器需要改动代码，发送的不是xhr请求
+    2. nginx 反向代理（nginx 服务内部配置 Access-Control-Allow-Origin *）
+    3. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
+    4. postMessage: HTML5中的XMLHttpRequest Level 2中的API
+    5. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
+    6. 凡是拥有scr这个属性的标签都可以跨域例如```<script><img><iframe>```
+4. localhost和127.0.0.1虽然都指向本机，但也属于跨域
+5. 总结: 跨域指的是浏览器不能执行其他网站的脚本，它是由浏览器的同源策略造成的，是浏览器施加的安全限制
+
 
 ### Q: GET 和 POST 的区别
 
