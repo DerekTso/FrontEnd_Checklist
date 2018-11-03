@@ -16,6 +16,7 @@
 ### JavaScript 相关
 
 - [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
+- [Q: for of 与 for in的区别](#q-for-of-与-for-in的区别)
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
@@ -85,6 +86,29 @@ void null; //undefined
 void function fn(){} ; //undefined
 ```
 
+### Q: for of 与 for in的区别
+
+* for in 遍历数组的问题
+
+1. 遍历顺序有可能不是按照实际数组的内部顺序
+2. 会遍历数组所有的可枚举属性，包括原型上的方法和属性
+```
+var arr = ['A', 'B', 'C'];
+arr.name = 'Hello';
+for (var x in arr) {
+    alert(x); // '0', '1', '2', 'name'
+}
+```
+3. for in遍历的是数组的索引（即键名），而for of遍历的是数组元素值
+4. for in更适合遍历对象，而不是遍历数组
+5. 如果不想遍历原型方法和属性的话，可以在循环内部判断一下，hasOwnPropery方法可以判断某属性是否是该对象的实例属性
+```
+for (var key in myObject) {
+　　if（myObject.hasOwnProperty(key)){
+　　　　console.log(key);
+　　}
+}
+```
 
 ### Q: mouseover 和 mouseenter 的区别
 

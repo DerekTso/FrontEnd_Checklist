@@ -5,7 +5,7 @@
 - [变量和函数的声明都被提前至函数体的顶部](#变量和函数的声明都被提前至函数体的顶部)
 - [Ionic和Cordova的区别](#Ionic和Cordova的区别)
 - [AngularJS的数据绑定采用什么机制?](#AngularJS的数据绑定采用什么机制?)
-- [AngularJS中$Apply()及$Digest()的区别](#AngularJS中$Apply()及$Digest()的区别)
+- [AngularJS中\$apply及\$digest的区别](#AngularJS中$apply及$digest的区别)
 
 ### 严格模式需要显式地引用全局作用域
 
@@ -58,13 +58,13 @@ test(); // undefined 2
 2. 每次绑定一个东西到 view 上时 AngularJS 就会往监听队列里插入一条 $watch，用来检测它监视的 model 里是否有变化的东西
 3. 当浏览器接收到可以被 Angular Context 处理的事件时(比如ng-click)，$digest 循环就会触发，遍历所有的 $watch，最后更新 dom
 
-### AngularJS中$Apply()及$Digest()的区别
+### AngularJS中\$apply及\$digest的区别
 
-1. AngularJS并不直接调用$digest()，而是调用$scope.$apply()，后者会调用$rootScope.$digest()
-2. $digest循环是在$rootScope开始，随后会访问所有的children scope中的watchers
-3. 如果你在AngularJS上下文之外的任何地方修改了model，那么你就需要通过手动调用$apply()来通知AngularJS
-4. $apply()方法有两种形式: 第一种会接受一个function作为参数，执行该function并且触发一轮$digest循环。第二种会不接受任何参数，只是触发一轮$digest循环
-5. 总是应该使用接受一个function作为参数的$apply()方法，因为当你传入一个function到$apply()中的时候，这个function会被包装到一个try…catch块中，所以一旦有异常发生，该异常会被$exceptionHandler service处理
-6. 无论何时我们手动处理事件，使用第三方框架（比如jQuery、Facebook API） ，或者调用setTimeout() ，都可以使用 $apply() 函数让Angular返回 $digest 循环
-7. $digest循环最少也会运行两次，即使在listener函数中并没有改变任何model
-8. $digest循环的次数达到了10次后会抛出异常
+1. AngularJS并不直接调用\$digest()，而是调用\$scope.\$apply()，后者会调用\$rootScope.\$digest()
+2. \$digest循环是在\$rootScope开始，随后会访问所有的children scope中的watchers
+3. 如果你在AngularJS上下文之外的任何地方修改了model，那么你就需要通过手动调用\$apply()来通知AngularJS
+4. \$apply()方法有两种形式: 第一种会接受一个function作为参数，执行该function并且触发一轮\$digest循环。第二种会不接受任何参数，只是触发一轮\$digest循环
+5. 总是应该使用接受一个function作为参数的\$apply()方法，因为当你传入一个function到\$apply()中的时候，这个function会被包装到一个try…catch块中，所以一旦有异常发生，该异常会被\$exceptionHandler service处理
+6. 无论何时我们手动处理事件，使用第三方框架（比如jQuery、Facebook API） ，或者调用setTimeout() ，都可以使用 \$apply() 函数让Angular返回 \$digest 循环
+7. \$digest循环最少也会运行两次，即使在listener函数中并没有改变任何model
+8. \$digest循环的次数达到了10次后会抛出异常
