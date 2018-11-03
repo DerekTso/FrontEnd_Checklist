@@ -433,30 +433,55 @@ border-left-color: orange; // 向右的箭头
 
 ### Q: 如何进行px与em的换算?
 
-* px 相对长度单位，是相对于显示器屏幕分辨率而言的
+* px 绝对长度单位，是相对于显示器屏幕分辨率而言的
 
 1. IE无法调整那些使用px作为单位的字体大小
 2. 国外的大部分网站能够调整的原因在于其使用了em或rem作为字体单位
-3. Firefox能够调整px和em，rem，但是96%以上的中国网民使用IE浏览器(或内核)
 
 * em 相对长度单位，是相对于当前对象内文本的字体尺寸(font-size)而言的
 
 1. em的值并不是固定的
-2. em会继承父级元素的字体大小
+2. em会继承父级元素的字体大小（参考物是父元素的font-size）
+3. em中所有的字体都是相对于父元素的大小决定的：如果一个设置了```font-size:1.2em```的元素在另一个设置了```font-size:1.2em```的元素里，那么它的字体大小为 1.2*1.2=1.44em
+```
+<div class="big">我是大字体
+    <div class="small">我是小字体</div>
+</div>
 
-* rem是CSS3新增的一个相对单位（root em）
+<style>
+    body {font-size: 62.5%; } /*  公式:16px*62.5%=10px  1em=10px*/
+    .big {font-size: 1.2em}
+    .small {font-size: 1.2em}
+</style>
+
+// small的字体大小为：1.2em*1.2em=1.44em
+```
+
+* rem是CSS3新增的一个相对长度单位（root em）
 
 1. 使用rem为元素设定字体大小时，仍然是相对大小，但相对的只是HTML根元素
-2. 通过它既可以做到只修改根元素就成比例地调整所有字体大小，又可以避免字体大小逐层复合的连锁反应
+2. 通过它既可以做到只修改根元素就成比例地调整所有字体大小，又可以避免像em那样字体大小逐层复合的连锁反应
+```
+<div class="big">我是14px=1.4rem
+    <div class="small">我是12px=1.2rem</div>
+</div>
+
+<style>
+    html {font-size: 10px;} /*  公式16px*62.5%=10px  1rem=10px*/
+    .big {font-size: 1.4rem}
+    .small {font-size: 1.2rem}
+</style>
+
+// small的字体大小为：1.2em*10=12px
+```
 3. 除了IE8及更早版本外，所有浏览器均已支持rem
-4. 对于不支持它的浏览器，多写一个绝对单位的声明
-```
-p {font-size:14px; font-size:.875rem;}
-```
 
 * em与px的换算
 
 1. 一般来说，浏览器的默认字体高度16px，所有未经调整的浏览器都符合: 1em=16px，那么 10px=0.625em
-2. 为了简化font-size的换算，需要在css中的body选择器中声明```font-size=62.5%```
+2. 为了简化font-size的换算，在css中的body选择器中写入以下代码
+```
+body {font-size: 62.5%;} /*  公式16px*62.5%=10px  */  
+```
 3. 这就使 1em = (16px * 62.5%) = 10px
 4. 也就是说只需要将你的原来的px数值除以10，然后换上em作为单位就行了
