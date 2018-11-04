@@ -11,6 +11,7 @@
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
 - [Q: 如何理解CSS中的display属性?](#q-如何理解CSS中的display属性?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
+- [Q: 如何理解list-style:none outside none的作用](#q-如何理解list-style:none-outside-none的作用)
 - [Q: 如何居中布局?](#q-如何居中布局?)
 - [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
 - [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
@@ -294,6 +295,18 @@ html{
     <button>submit</button>
 </div>
 ```
+
+### Q: 如何理解```list-style:none outside none;```的作用
+
+1. 当ul浮动后```float: left;```，需要加上```display:inline;```来解决在IE6中的双倍边距问题
+```
+.ul { float:left; display:inline; }
+.ul li { list-style:none; }
+```
+2. 以上CSS设置，在FF、ie8下面显示正常，列表符隐去不见，li里面的内容与框之间没有距离
+3. 但是在ie6、ie7里面虽然也会隐去列表符，但还会保留列表符在li里面所占的位置
+4. 造成ie6、ie7这种效果差别，可能是因为属性```list-style-position：inside;```是他们的默认值，即使设置了```list-style:none;```
+5. 在 CSS Reset 的时候使用 ```list-style:none outside none;``` 更好
 
 ### Q: 如何居中布局?
 
