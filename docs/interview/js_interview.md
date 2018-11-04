@@ -27,6 +27,7 @@
 - [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
 - [Q: WebStorage 和 Cookie 的区别](#q-WebStorage-和-Cookie-的区别)
 - [Q: sessionStorage 和 localStorage 的区别](#q-sessionStorage-和-localStorage-的区别)
+- [Q: axios和ajax的区别](#q-axios和ajax的区别)
 - [Q: 如何理解 V8 引擎字节码](#q-如何理解-V8-引擎字节码)
 
 ### 服务器相关
@@ -235,6 +236,20 @@ Function.prototype.myApply = function (context) {
 5. 对于object对象可以用JSON.stringfy进行转化然后存储，用的时候利用JSON.parse转化回来使用
 6. 对于图片存储我们可以将图片转化为DataURI格式进行存储；具体转化方式可以借用canvas提供的toDataURL
 7. 对于webstorage本地存储各浏览器支持也是不同，平均对每个源分配的存储大小大约5M
+
+### Q: axios和ajax的区别
+
+1. ajax技术实现了网页的局部数据刷新
+2. axios是通过promise实现对ajax技术的一种封装
+3. axios本身具有以下特征：
+    1. 从浏览器中创建 XMLHttpRequest
+    2. 从 node.js 发出 http 请求
+    3. 支持 Promise API
+    4. 拦截请求和响应
+    5. 转换请求和响应数据
+    6. 取消请求
+    7. 自动转换JSON数据
+    8. 客户端支持防止CSRF/XSRF
 
 ### Q: 如何理解 V8 引擎字节码
 
