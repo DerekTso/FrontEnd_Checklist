@@ -6,6 +6,7 @@
 - [Q: HTML5 有哪些新特性?](#q-HTML5-有哪些新特性?)
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
+- [Q: 如何获取浏览器窗口的可见宽高?](#q-如何获取浏览器窗口的可见宽高?)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
@@ -70,6 +71,29 @@
 2. 过于依赖网络，速度无法保证。特别在弱网环境下，不仅耗费流量而且加载缓慢，就算是 WiFi 情况下也不容乐观
 3. 只能使用有限的设备底层功能（无法使用摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等功能）
 4. 仍处于发展阶段，部分功能无法在基于现有技术的浏览器基础上实现，且无法全面的显示最完美的用户体验，只能用现有技术去弥去找最佳解决方案
+
+### Q: 如何获取浏览器窗口的可见宽高?
+
+1. 浏览器窗口的尺寸(就是内容部分，可见的部分，不包括工具栏和滚动条)
+2. 对于IE、Chrome、Firefox、Opera 以及 Safari
+```
+window.innerWidth: 浏览器窗口的可见宽度
+window.innerHeight: 浏览器窗口的可见高度
+```
+3. 对于 IE 8、7、6、5
+```
+document.documentElement.clientHeight
+document.documentElement.clientWidth
+或者
+document.body.clientHeight
+document.body.clientWidth
+```
+4. 兼容所有浏览器
+```
+var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+```
 
 ### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
 
