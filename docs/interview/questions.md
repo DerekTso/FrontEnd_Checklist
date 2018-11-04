@@ -1,11 +1,27 @@
 # 前端面试 - 面试基础题
 
 ## 目录
+- [浏览器兼容性问题](#浏览器兼容性问题)
 - [严格模式需要显式地引用全局作用域](#严格模式需要显式地引用全局作用域)
 - [变量和函数的声明都被提前至函数体的顶部](#变量和函数的声明都被提前至函数体的顶部)
 - [Ionic和Cordova的区别](#Ionic和Cordova的区别)
 - [AngularJS的数据绑定采用什么机制?](#AngularJS的数据绑定采用什么机制?)
 - [AngularJS中\$apply及\$digest的区别](#AngularJS中$apply及$digest的区别)
+
+### 浏览器兼容性问题
+
+1. IE8之前的浏览器都会给标签一个最小默认的行高的高度。即使你的标签是空的，这个标签的高度还是会达到默认的行高
+2. 清除浮动
+```
+#box:after{ 
+    content: “.”; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden; 
+}
+```
+3. 超链接CSS属性的排列顺序: L-V-H-A (link visited hover active)
 
 ### 严格模式需要显式地引用全局作用域
 
