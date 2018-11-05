@@ -339,17 +339,6 @@ Function.prototype.myCall = function (context) {
 }
 ```
 
-### Q: 如何理解箭头函数中的this
-
-1. 传统函数的 this 是动态的。它取决于 this 怎样被调用
-2. 箭头函数的 this 是静态的。它是一个词法（lexical ）上的值，它取决于 this 在哪个作用域中定义
-3. 用 ```call()``` 或者 ```apply()``` 调用箭头函数时，无法对 this 进行绑定，即传入的第一个参数被忽略
-4. 由于箭头函数没有 [[Construct]] 内部方法，因此，它将不能用作构造函数。如果使用了 new 关键字创建新的函数，则会抛出错误
-5. ```const value = () => foo()```解释为```const value = () => (foo())```
-6. ```var func = () => ({foo: 1}); // Object对象要做个括号```
-7. ```callback = callback || () => {}; // SyntaxError: invalid arrow-function arguments```
-8. ```callback = callback || (() => {}); // ok```
-
 ### Q: 如何实现一个 apply 函数
 
 ```
@@ -366,6 +355,17 @@ Function.prototype.myApply = function (context) {
   return result
 }
 ```
+
+### Q: 如何理解箭头函数中的this
+
+1. 传统函数的 this 是动态的。它取决于 this 怎样被调用
+2. 箭头函数的 this 是静态的。它是一个词法（lexical ）上的值，它取决于 this 在哪个作用域中定义
+3. 用 ```call()``` 或者 ```apply()``` 调用箭头函数时，无法对 this 进行绑定，即传入的第一个参数被忽略
+4. 由于箭头函数没有 [[Construct]] 内部方法，因此，它将不能用作构造函数。如果使用了 new 关键字创建新的函数，则会抛出错误
+5. ```const value = () => foo()```解释为```const value = () => (foo())```
+6. ```var func = () => ({foo: 1}); // Object对象要做个括号```
+7. ```callback = callback || () => {}; // SyntaxError: invalid arrow-function arguments```
+8. ```callback = callback || (() => {}); // ok```
 
 ### Q: window.onload 和 document.ready 的区别
 
