@@ -7,8 +7,10 @@
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
 - [Q: 如何获取浏览器窗口的可见宽高?](#q-如何获取浏览器窗口的可见宽高?)
+- [Q: 如何理解getBoundingClientRect?](#q-如何理解getBoundingClientRect?)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
+- [Q: 如何理解BFC?](#q-如何理解BFC?)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
 - [Q: 如何理解CSS中的display属性?](#q-如何理解CSS中的display属性?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
@@ -93,6 +95,32 @@ document.body.clientWidth
 var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
 var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+```
+
+### Q: 如何理解getBoundingClientRect?
+
+1. getBoundingClientRect()返回一个矩形对象，包含四个属性：top，right, bottom, left，分别表示元素各边与页面上边和左边的距离
+2. 在IE中，默认坐标从(2,2)开始计算，导致最终距离比其他浏览器多出两个像素
+```
+function getRect (element) {
+    var rect = element.getBoundingClientRect();
+    var top = document.documentElement.clientTop; // 非IE为0，IE为2
+    var left= document.documentElement.clientLeft; // 非IE为0，IE为2
+    return {
+        top    :   rect.top - top,
+        bottom :   rect.bottom - top,
+        left   :   rect.left - left,
+        right  :   rect.right - left
+    }
+}
+// width: rect.width || right - left;
+// Height: rect.height || bottom - top;
+```
+3. 获取页面元素的位置
+```
+var X = this.getBoundingClientRect().left + document.documentElement.scrollLeft;
+
+var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 ```
 
 ### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
@@ -188,6 +216,22 @@ var h = window.innerHeight || document.documentElement.clientHeight || document.
 8.  绝对(absolute)定位对象在可视区域之外会导致滚动条出现
 9.  相对(relative)定位对象在可视区域之外，滚动条不会出现
 ```
+
+### Q: 如何理解BFC?
+
+1. BFC: Block Formatting Context 直译为 "块级格式化上下文"
+2. BFC是一个页面上的独立的容器，外面的元素不会影响BFC里的元素，反过来，里面的也不会影响外面的
+3. 属于同一个BFC的两个相邻box的margin会发生重叠
+4. 创建BFC
+    1. float属性不为none（脱离文档流）
+    2. position为absolute或fixed
+    3. display为inline-block,table-cell,table-caption,flex,inine-flex
+    4. overflow不为visible
+    5. 根元素
+5. 应用场景
+    1. 自适应两栏布局
+    2. 清除内部浮动 
+    3. 防止垂直margin重叠
 
 ### Q: 什么是 CSS 盒模型?
 
