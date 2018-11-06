@@ -18,6 +18,7 @@
 - [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
 - [Q: JS中数据类型的布尔值及其比较](#q-JS中数据类型的布尔值及其比较)
 - [Q: 如何理解ES6中的新数据类型Symbol](#q-如何理解ES6中的新数据类型Symbol)
+- [Q: 如何理解ES6中的Map](#q-如何理解ES6中的Map)
 - [Q: 如何理解ES6中的Module](#q-如何理解ES6中的Module)
 - [Q: for of 与 for in的区别](#q-for-of-与-for-in的区别)
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
@@ -121,6 +122,7 @@ if(new Boolean(false)){
 7. NaN, {} 和 任意值比较（包括自身）都是返回false
 8. 除了 true==true 以外, true和其他值哪怕非0的数字，非空字符串，非空对象，非空数组都是返回false
 9. undefined == null // true
+10. 0 === -0
 
 ### Q: 如何理解ES6中的新数据类型Symbol
 
@@ -283,6 +285,117 @@ Symbol.keyFor(s1) // "foo"
 
 let s2 = Symbol("foo");
 Symbol.keyFor(s2) // 变量s2属于未登记的 Symbol 值，所以返回undefined
+```
+
+### Q: 如何理解ES6中的Map
+
+1. JavaScript 的对象（Object），本质上是键值对的集合（Hash 结构），但是传统上只能用 字符串 或者 Symbol 当作键
+2. 为了解决这个问题，ES6 提供了 Map 数据结构，键的范围不限于字符串，各种类型的值（包括对象）都可以当作键
+3. Object 结构提供了"字符串—值"的对应，Map 结构提供了"值—值"的对应
+4. 键值对的数据结构
+```
+const m = new Map();
+const o = {p: 'Hello World'};
+
+m.set(o, 'content')
+m.get(o) // "content"
+m.size // 1
+
+m.has(o) // true
+m.delete(o) // true
+m.has(o) // false
+```
+5. 接受一个数组作为参数
+```
+const map = new Map([
+  ['name', '张三'],
+  ['title', 'Author']
+]);
+
+map.size // 2
+map.has('name') // true
+map.get('name') // "张三"
+map.has('title') // true
+map.get('title') // "Author"
+```
+6. ```Set```和```Map```都可以用来生成新的 Map
+```
+const set = new Set([
+  ['foo', 1],
+  ['bar', 2]
+]);
+const m1 = new Map(set);
+m1.get('foo') // 1
+
+const m2 = new Map([['baz', 3]]);
+const m3 = new Map(m2);
+m3.get('baz') // 3
+```
+7. 如果对同一个键多次赋值，后面的值将覆盖前面的值
+```
+const map = new Map();
+
+map
+.set(1, 'aaa')
+.set(1, 'bbb');
+
+map.get(1) // "bbb"
+```
+8. 如果读取一个未知的键，则返回```undefined```
+```
+new Map().get('asfddfsasadf') // undefined
+```
+9. 只有对同一个对象的引用，Map 结构才将其视为同一个键
+```
+const map = new Map();
+
+map.set(['a'], 555);
+map.get(['a']) // undefined
+// 表面是针对同一个键，但实际上这是两个值，内存地址是不一样的
+// 因此get方法无法读取该键，返回undefined
+```
+10. Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。这就解决了同名属性碰撞（clash）的问题
+11. 如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键，undefined和null也是两个不同的键
+12. 虽然NaN不严格相等于自身，但 Map 将其视为同一个键
+```
+let map = new Map();
+
+map.set(-0, 123);
+map.get(+0) // 123
+
+map.set(true, 1);
+map.set('true', 2);
+map.get(true) // 1
+
+map.set(undefined, 3);
+map.set(null, 4);
+map.get(undefined) // 3
+
+map.set(NaN, 123);
+map.get(NaN) // 123
+
+map.clear()
+map.size // 0
+```
+13. Map 结构转为数组结构，比较快速的方法是使用扩展运算符（...）
+```
+const map = new Map([
+  [1, 'one'],
+  [2, 'two'],
+  [3, 'three'],
+]);
+
+[...map.keys()]
+// [1, 2, 3]
+
+[...map.values()]
+// ['one', 'two', 'three']
+
+[...map.entries()]
+// [[1,'one'], [2, 'two'], [3, 'three']]
+
+[...map]
+// [[1,'one'], [2, 'two'], [3, 'three']]
 ```
 
 ### Q: 如何理解ES6中的Module
