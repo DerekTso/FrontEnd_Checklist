@@ -17,6 +17,7 @@
 
 - [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
 - [Q: 如何理解ES6中的新数据类型Symbol](#q-如何理解ES6中的新数据类型Symbol)
+- [Q: 如何理解ES6中的Module](#q-如何理解ES6中的Module)
 - [Q: for of 与 for in的区别](#q-for-of-与-for-in的区别)
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
@@ -249,6 +250,146 @@ Symbol.keyFor(s1) // "foo"
 
 let s2 = Symbol("foo");
 Symbol.keyFor(s2) // 变量s2属于未登记的 Symbol 值，所以返回undefined
+```
+
+### Q: 如何理解ES6中的Module
+
+* 基本特点
+
+1. 每一个模块只加载一次， 每一个JS只执行一次， 如果下次再去加载同目录下同文件，直接从内存中读取；
+2. 每一个模块内声明的变量都是局部变量， 不会污染全局作用域；
+3. 模块内部的变量或者函数可以通过export导出；
+4. 一个模块可以导入别的模块
+5. 模块功能主要由两个命令构成：export和import
+```
+// export default命令，为模块指定默认输出（一个模块只能有一个默认输出）
+// 这样就可以在使用 import 命令的时候，不必知道所要加载的变量名或函数名
+// import 命令可以为该匿名函数指定任意名字，这时import命令后面，不使用大括号
+
+// export-default.js
+export default function () {
+  console.log('foo');
+}
+
+// import-default.js
+import customName from './export-default';
+customName(); // 'foo'
+
+---
+
+// 由于 export default 命令其实只是输出一个叫做default的变量
+// 所以它后面不能跟变量声明语句
+
+// 正确
+export var a = 1;
+
+// 正确
+var a = 1;
+export default a;  //等同于将变量 a 的值赋给变量 default
+
+// 错误
+export default var a = 1;
+
+---
+
+// export default也可以用来输出类
+
+// MyClass.js
+export default class { ... }
+
+// main.js
+import MyClass from 'MyClass';
+let o = new MyClass();
+
+---
+
+// 使用export关键字输出变量
+// profile.js
+export var firstName = 'Michael';
+export var lastName = 'Jackson';
+export var year = 1958;
+
+//或者
+// profile.js
+var firstName = 'Michael';
+var lastName = 'Jackson';
+var year = 1958;
+export {firstName, lastName, year};
+
+---
+
+// 使用export关键字输出函数或类
+export function multiply(x, y) {
+  return x * y;
+};
+
+---
+
+// 一般来说，export 输出的变量就是本来的名字
+// 但是可以使用 as 关键字重命名
+function Module1() { ... }
+function Module2() { ... }
+export {
+  Module1 as Func1,
+  Module2 as Func2
+};
+
+---
+
+// export命令要处于模块顶层
+// 如果处于块级作用域内，就会报错
+function foo() {
+  export default 'bar' // SyntaxError
+}
+foo()
+
+---
+
+// 通过import命令加载这个模块，import命令接受一对大括号
+// 里面指定要从其他模块导入的变量名，大括号里面的变量名，必须与被导入模块（profile.js）对外接口的名称相同
+// main.js
+import {firstName, lastName, year} from './profile';
+
+---
+
+// 使用 as 关键字，将输入的变量重命名
+import { lastName as secondName } from './profile';
+
+---
+
+// import命令具有提升效果，会提升到整个模块的头部，首先执行
+// 因为 import 命令是编译阶段执行的
+func(); // 不会报错
+import { func } from 'methods';
+
+---
+
+// 由于import是静态执行，所以不能使用表达式、变量和 if 结构
+// 在静态分析阶段，这些语法都是没法得到值的
+
+// 报错
+import { 'f' + 'oo' } from 'methods';
+
+// 报错
+let module = 'methods';
+import { foo } from module;
+
+// 报错
+if (x === 1) {
+  import { foo } from 'module1';
+} else {
+  import { foo } from 'module2';
+}
+
+---
+
+//逐一加载
+import { circleArea , rectArea } from './tools';
+
+//整体加载
+import * as area from './tools';
+
+---
 ```
 
 ### Q: for of 与 for in的区别
