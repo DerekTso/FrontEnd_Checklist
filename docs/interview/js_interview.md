@@ -16,6 +16,7 @@
 ### JavaScript 相关
 
 - [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
+- [Q: JS中数据类型的布尔值及其比较](#q-JS中数据类型的布尔值及其比较)
 - [Q: 如何理解ES6中的新数据类型Symbol](#q-如何理解ES6中的新数据类型Symbol)
 - [Q: 如何理解ES6中的Module](#q-如何理解ES6中的Module)
 - [Q: for of 与 for in的区别](#q-for-of-与-for-in的区别)
@@ -88,6 +89,38 @@ void []; //undefined
 void null; //undefined
 void function fn(){} ; //undefined
 ```
+
+### Q: JS中数据类型的布尔值及其比较
+
+1. JS中有6个值为false，分别是: 0, '', null, undefined, NaN 和 false。而 {}, [], Infinity 为true
+2. 可以使用Boolean()函数或是两次取非就能获得对象的布尔值
+```
+Boolean(undefined) // false
+!!undefined // false
+```
+3. 不同的对象比较返回false，只有引用相同的对象才返回true
+```
+var a = b = {};
+console.log(a==b) ; //true
+console.log({}=={}); //false
+console.log([]==[]); //false，因为[]是object
+```
+4. 通过new Boolean(false)能获得一个初始值为false的布尔对象
+```
+console.log(new Boolean(false)==false); //true
+console.log(new Boolean(true)==true); //true
+```
+5. 不能用new Boolean()来获取对象的布尔值，因为布尔对象永远是true
+```
+if(new Boolean(false)){
+    alert('abc'); // 会执行这里的代码，因为new Boolean返回的是一个布尔对象
+}
+// 使用 Boolean()函数 或是 两次取非 来获得对象的布尔值
+```
+6. Infinity == Infinity // true
+7. NaN, {} 和 任意值比较（包括自身）都是返回false
+8. 除了 true==true 以外, true和其他值哪怕非0的数字，非空字符串，非空对象，非空数组都是返回false
+9. undefined == null // true
 
 ### Q: 如何理解ES6中的新数据类型Symbol
 
