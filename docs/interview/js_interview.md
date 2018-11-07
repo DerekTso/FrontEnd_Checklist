@@ -636,6 +636,8 @@ for (var key in myObject) {
 
 2. mouseenter: 当鼠标移入元素本身（不包含元素的子元素）会触发事件，也就是不会冒泡，对应的移除事件是mouseleave
 
+3. mouseover和mouseout 比 mouseenter和mouseleave 先触发
+
 ### Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别
 
 1. 与 setTimeout 和 setInterval 不同，requestAnimationFrame 不需要设置时间间隔
