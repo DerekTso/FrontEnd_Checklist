@@ -736,13 +736,112 @@ Function.prototype.myInstanceof = function (A, B) {
 ### Q: 如何理解箭头函数中的this
 
 1. 传统函数的 this 是动态的。它取决于 this 怎样被调用
+    1. this总是代表它的直接调用者，例如 obj.func，那么func中的this就是obj
+    2. 在默认情况(非严格模式下，未使用 'use strict')，没找到直接调用者，则this指的是 window
+    ```
+    function test() {
+      console.log(this); // window
+    }
+    test();
+    ```
+    3. 在严格模式下，没有直接调用者的函数中的this是 undefined
+    ```
+    function test() {
+      'use strict';
+      console.log(this); // undefined
+    }
+    test();
+    ```
+    4. 使用call，apply，bind绑定的函数中，this指的是绑定的对象
+    ```
+    var obj = {
+        say: function () {
+          'use strict';
+          setTimeout(function () {  
+            console.log(this); // obj     
+          }.bind(this));  
+        }  
+      }  
+      obj.say();
+    ```
 2. 箭头函数的 this 是静态的。它是一个词法（lexical ）上的值，它取决于 this 在哪个作用域中定义
 3. 用 ```call()``` 或者 ```apply()``` 调用箭头函数时，无法对 this 进行绑定，即传入的第一个参数被忽略
 4. 由于箭头函数没有 [[Construct]] 内部方法，因此，它将不能用作构造函数。如果使用了 new 关键字创建新的函数，则会抛出错误
 5. ```const value = () => foo()```解释为```const value = () => (foo())```
-6. ```var func = () => ({foo: 1}); // Object对象要做个括号```
-7. ```callback = callback || () => {}; // SyntaxError: invalid arrow-function arguments```
-8. ```callback = callback || (() => {}); // ok```
+6. ```var func = () => ({foo: 1}); // Object对象要加个括号```
+7. 箭头函数做为一个整体也要加个括号
+```
+callback = callback || () => {}; // SyntaxError: invalid arrow-function arguments
+callback = callback || (() => {}); // ok
+```
+8. 匿名函数、定时器中的函数，由于没有默认的宿主对象，所以默认this指向window
+```
+var obj = {
+   say: function () {
+     setTimeout(function () {
+       console.log(this); // window
+     });
+   }
+ }
+ obj.say();
+```
+9. 箭头函数中的 this 指向的是定义它的对象
+```
+var obj = {
+   say: function () {
+     setTimeout(() => {
+       console.log(this); // obj
+     });
+   }
+ }
+ obj.say();
+```
+10. 多层嵌套的箭头函数
+```
+var obj = {
+  say: function () {
+      var f1 = () => {
+          console.log(this); // obj
+          setTimeout(() => {
+            console.log(this); // obj
+          });
+      };
+      f1();
+    }
+}
+obj.say();
+```
+11. 普通函数和箭头函数混杂嵌套
+```
+var obj = {
+  say: function () {
+    var f1 = function () {
+      console.log(this); // window，f1调用时，匿名函数没有宿主对象，默认是window
+      setTimeout(() => {
+        console.log(this); // window
+      });
+    };
+    f1();
+  }
+}
+obj.say();
+```
+12. 严格模式下的混杂嵌套
+```
+var obj = {
+  say: function () {
+    'use strict';
+    var f1 = function () {
+      console.log(this); // undefined
+      setTimeout(() => {
+        console.log(this); // undefined
+      });
+    };
+    f1();
+  }
+}
+obj.say();
+```
 
 ### Q: window.onload 和 document.ready 的区别
 
