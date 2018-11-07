@@ -8,6 +8,33 @@
 
 ### 函数防抖(debounce)
 
+> 当调用动作过n毫秒后，才会执行该动作，若在这n毫秒内又调用此动作则将重新计算执行时间
+```
+// 在窗口滚动过程中会连续打印出很多的 hello world
+window.onscroll = function () {
+    console.log('hello world');
+};
+```
+```
+// 防抖函数
+const debounce = (fn, wait = 0) => {
+    let inDebounce;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(inDebounce);
+        inDebounce = setTimeout(() => fn.apply(context, args), wait);
+    };
+};
+// 在窗口滚动后 250ms 后执行 console.log('hello world')
+window.addEventListener(
+    'scroll',
+    debounce(function() {
+        console.log('hello world');
+    }, 250)
+)
+```
+
 ```
 // 模拟一段ajax请求
 function ajax(content) {
@@ -15,12 +42,12 @@ function ajax(content) {
 }
 
 function debounce(fun, delay) {
-    return function (args) {
-        let that = this
-        let _args = args
+    return function () {
+        const context = this
+        const args = arguments
         clearTimeout(fun.id)
         fun.id = setTimeout(function () {
-            fun.call(that, _args)
+            fun.apply(context, args)
         }, delay)
     }
 }
