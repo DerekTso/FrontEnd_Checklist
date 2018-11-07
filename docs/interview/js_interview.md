@@ -27,6 +27,7 @@
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
+- [Q: 如何实现一个 instanceof 函数](#q-如何实现一个-instanceof-函数)
 - [Q: 如何理解箭头函数中的this](#q-如何理解箭头函数中的this)
 - [Q: window.onload 和 document.ready 的区别](#q-windowonload-和-documentready-的区别)
 - [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
@@ -145,6 +146,9 @@ typeof(null);
 * function
 
 ```
+typeof(Object);
+typeof(Function);
+typeof(Number);
 typeof(Array);
 typeof(Date);
 ```
@@ -704,6 +708,26 @@ Function.prototype.myApply = function (context) {
   }
   delete context.fn
   return result
+}
+```
+
+### Q: 如何实现一个 instanceof 函数
+
+```
+Function.prototype.myInstanceof = function (A, B) {
+    var O = B.prototype; // 取B的显示原型
+    A = A.__proto__; // 取A的隐式原型
+    while (true) {
+        // Object.prototype.__proto__ === null
+        if (A === null) {
+            return false;
+        }
+        // 当 O 严格等于 A 时，返回 true
+        if (O === A) {
+            return true;
+        }
+        A = A.__proto__;
+    }
 }
 ```
 
