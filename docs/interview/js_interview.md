@@ -33,6 +33,7 @@
 - [Q: cookie的主要应用场景](#q-cookie的主要应用场景)
 - [Q: WebStorage 和 Cookie 的区别](#q-WebStorage-和-Cookie-的区别)
 - [Q: sessionStorage 和 localStorage 的区别](#q-sessionStorage-和-localStorage-的区别)
+- [Q: 如何理解ajax的原理和运行机制](#q-如何理解ajax的原理和运行机制)
 - [Q: axios和ajax的区别](#q-axios和ajax的区别)
 - [Q: 如何理解 V8 引擎字节码](#q-如何理解-V8-引擎字节码)
 
@@ -876,6 +877,45 @@ obj.say();
 5. 对于object对象可以用JSON.stringfy进行转化然后存储，用的时候利用JSON.parse转化回来使用
 6. 对于图片存储我们可以将图片转化为DataURI格式进行存储；具体转化方式可以借用canvas提供的toDataURL
 7. 对于webstorage本地存储各浏览器支持也是不同，平均对每个源分配的存储大小大约5M
+
+### Q: 如何理解ajax的原理和运行机制
+
+1. XMLHttpRequest是ajax的核心机制，它是在IE5中首先引入的，是一种支持异步请求的技术，javascript可以及时向服务器提出请求和处理响应，而不阻塞用户，达到局部刷新的效果
+2. XMLHttpRequest这个对象的属性
+    1. onreadystatechange：每次状态改变所触发的事件处理程序
+    2. responseText：从服务器进程返回数据的字符串形式
+    3. responseXML：从服务器进程返回的DOM兼容的文档数据对象
+    4. status：从服务器返回的数字代码
+    5. status Text：伴随状态码的字符串信息
+    6. readyState：对象状态值，0—未初始化 1—正在加载 2—加载完毕 3—交互 4—完成
+3. 创建一个XMLHttpRequest对象
+```
+var xmlhttp;
+if (window.XMLHttpRequest) {
+    //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+    xmlhttp = new XMLHttpRequest();
+} else {
+    // IE6, IE5 浏览器执行代码
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+}
+```
+4. 发出一个XMLHttpRequest请求
+```
+xmlhttp.open("GET","/try/ajax/demo_get.php",true);
+xmlhttp.send();
+
+xmlhttp.open("POST","/try/ajax/demo_post2.php",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("fname=Henry&lname=Ford");
+```
+5. 回调函数处理响应
+```
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4  && xmlhttp.status == 200) {
+        document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+    }
+}
+```
 
 ### Q: axios和ajax的区别
 
