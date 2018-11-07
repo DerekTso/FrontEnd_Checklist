@@ -16,6 +16,7 @@
 ### JavaScript 相关
 
 - [Q: Undefined 和 Null 的区别](#q-Undefined-和-Null-的区别)
+- [Q: JS中typeof的返回值类型有哪些](#q-JS中typeof的返回值类型有哪些)
 - [Q: JS中数据类型的布尔值及其比较](#q-JS中数据类型的布尔值及其比较)
 - [Q: 如何理解ES6中的新数据类型Symbol](#q-如何理解ES6中的新数据类型Symbol)
 - [Q: 如何理解ES6中的Map](#q-如何理解ES6中的Map)
@@ -89,6 +90,69 @@ void false; //undefined
 void []; //undefined
 void null; //undefined
 void function fn(){} ; //undefined
+```
+
+### Q: JS中typeof的返回值类型有哪些
+
+typeof的返回值共有七种
+```
+string
+number
+boolean
+undefined
+object
+function
+symbol
+```
+
+* string
+
+```
+typeof("abc");
+```
+
+* number
+
+```
+typeof(10);
+typeof(NaN);
+typeof(Infinity);
+```
+
+* boolean
+
+```
+typeof(true);
+typeof(false);
+```
+
+* undefined
+
+```
+typeof(undefined);
+typeof(a); // 不存在的变量
+```
+
+* object
+
+```
+// 对象，数组，null返回object
+typeof({});
+typeof([]);
+typeof(null);
+```
+
+* function
+
+```
+typeof(Array);
+typeof(Date);
+```
+
+* symbol
+
+```
+typeof Symbol(); // ES6提供的新的类型
 ```
 
 ### Q: JS中数据类型的布尔值及其比较
