@@ -37,6 +37,7 @@
 - [codepen](https://codepen.io)
 - [visual studio code](https://code.visualstudio.com)
 - [chrome dev tools](https://www.css88.com/doc/chrome-devtools)
+- [Browser support list](https://caniuse.com)
 
 ### Help and Knowledge
 
