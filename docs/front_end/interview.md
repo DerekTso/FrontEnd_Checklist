@@ -63,6 +63,16 @@ test(); // undefined 2
 2. 变量并没有被赋值。虽然 a 已经被声明，但仍然是undefined
 ```
 
+```
+var a = 1;
+function test(){
+	console.log(a);
+  console.log(window.a);
+	var a = 2;
+}
+test(); // undefined 1
+```
+
 ### Ionic和Cordova的区别
 
 1. Ionic是一款基于AngularJS的HTML5移动App开发框架，以PhoneGap为蓝本，让开发者可以通过命令行工具快速生成android、ios移动App应用
