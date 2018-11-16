@@ -59,6 +59,7 @@
 5. ```Number(null); // 0```
 6. 如果需要释放某个对象(垃圾回收)，就将其设置为null
 7. 对于参数默认值来说，如果传入 undefined 的话就会使用默认值，但是如果传入 null 的话就不会使用默认值
+8. 按位非：~null => -1, ~~null => 0
 
 * Undefined
 
@@ -93,6 +94,7 @@ void []; //undefined
 void null; //undefined
 void function fn(){} ; //undefined
 ```
+8. 按位非：~undefined => -1, ~~undefined => 0
 
 ### Q: JS中typeof的返回值类型有哪些
 
