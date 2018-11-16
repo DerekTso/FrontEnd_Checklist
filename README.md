@@ -50,6 +50,7 @@
 - [HTML5基础 - WebWorker](docs/h5_css3/webWorker.md)
 - [HTML5基础 - 前端开发规范](docs/h5_css3/coding_style.md)
 - [CSS3基础 - box-shadow](docs/h5_css/box-shadow.md)
+- [CSS3基础 - rgba](docs/h5_css/rgba.md)
 
 ### Front-End Development
 
