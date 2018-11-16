@@ -12,6 +12,7 @@
 - [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: 如何理解BFC?](#q-如何理解BFC?)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
+- [Q: 如何理解CSS中的float属性?](#q-如何理解CSS中的float属性?)
 - [Q: 如何理解CSS中的display属性?](#q-如何理解CSS中的display属性?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
 - [Q: 如何理解list-style:none outside none的作用](#q-如何理解list-style:none-outside-none的作用)
@@ -171,8 +172,10 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 1. absolute: 相对于最近一级的定位不是 static 的父元素来进行定位，如果没有，就是相对于根元素，有z-index属性，脱离正常文档流
 2. fixed: 相对于浏览器窗口或 frame 进行定位，是特殊的absolute，总是以body为定位对象的，即使拖动滚动条，元素的位置也是不会改变的，有z-index属性，脱离正常文档流
 3. relative: 相对于正常文档流中的位置进行定位，有z-index属性，relative的偏移是基于对象的margin的左上侧的
-4. static: 没有定位，元素出现在正常文档流中，top，right，bottom，left等属性不会被应用
+4. static: 默认值。没有定位，元素出现在正常文档流中，top，right，bottom，left等属性不会被应用
 5. sticky: 容器的位置根据正常文档流计算得出
+6. 所谓的文档流，指的是元素排版布局过程中，元素会自动从左往右，从上往下的流式排列
+7. 脱离文档流，指的是元素从普通的布局排版中脱离，其他盒子会填补脱离了文档流元素的原本位置而进行定位
 
 * z-index
 
@@ -248,6 +251,40 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 3. 在标准盒子模型中，width指 content 部分的宽度
 4. 在IE盒子模型中，width表示 content+padding+border 这三个部分的宽度
 5. CSS3中引入了 box-sizing 属性，```box-sizing:content-box;```表示标准的盒子模型，```box-sizing:border-box;```表示的是IE盒子模型
+
+### Q: 如何理解CSS中的float属性?
+
+1. 浮动元素块状化：块状化是指可以像块元素一样设置宽和高，但并不是真正的块元素
+```
+<div style="height: 200px; width: 200px;"> 
+    <span style="float: left; width: 150px; height: 150px;>浮动元素span</span> 
+</div>
+```
+2. 高度塌陷：因为浮动元素脱离了正常的文档流，父元素的高度并没有被子元素撑开，父元素被认为没有子元素，所以产生了高度塌陷
+3. 在CSS中可以使用```clear:both```来清除float属性带来高度塌陷等问题
+4. clear属性：元素盒子的边不能和**前面的**浮动元素相邻，也就是说clear属性对**后面的**浮动元素是不闻不问的
+5. clear属性只能清除浮动对元素自身带来的影响，不能影响其他的元素
+6. 由于clear属性的本质是让元素自身不和float元素在一行显示，并不是真正意义上的清除浮动，如果设置了```clear:both```的元素的前面是float元素，则其设置margin-top是无效的
+7. 在实际工作中，我们常常使用下面的代码来清除浮动带来的影响
+```
+.clearfix:after {
+    content: " ";
+    display: block;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+.clearfix { *zoom:1;}
+// 这是针对于IE6的，因为IE6不支持:after伪类
+// zoom:1 让IE6的元素可以清除浮动来包裹内部元素
+```
+8. 使用BFC来清除浮动，添加```overflow：hidden```
+9. ```overflow：hidden```的含义是超出的部分要裁切隐藏，float的元素虽然不在普通流中，但它是浮动在普通流之上的，可以把普通流元素和浮动元素想象成一个立方体。如果在没有明确设定包含容器高度的情况下，它要计算内容的全部高度才能确定在什么位置hidden，这样浮动元素的高度就要被计算进去。这样包含容器就会被撑开，达到清除浮动的效果
+10.  浮动元素后的非浮动元素问题
+        1. 浮动元素后边的元素若是 非浮动行内元素 且在定位后产生重叠时，行内元素边框、背景和内容(文本)都在该浮动元素"之上"显示
+        2. 浮动元素后边的元素若是 非浮动块级元素 且在定位后产生重叠时，块级元素边框和背景都在该浮动元素"之下"显示，内容(文本)在浮动元素"之后"显示
 
 ### Q: 如何理解CSS中的display属性?
 

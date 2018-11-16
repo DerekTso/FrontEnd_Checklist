@@ -15,18 +15,22 @@
 1. IE8之前的浏览器都会给标签一个最小默认的行高的高度。即使你的标签是空的，这个标签的高度还是会达到默认的行高
 2. 清除浮动
 ```
-#box:after{ 
-    content: “.”; 
-    display: block; 
-    height: 0; 
-    clear: both; 
-    visibility: hidden; 
+.clearfix:after {
+    content: " ";
+    display: block;
+    height: 0;
+    line-height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
 }
+.clearfix { *zoom:1;}
+// 这是针对于IE6的，因为IE6不支持:after伪类
+// zoom:1 让IE6的元素可以清除浮动来包裹内部元素
 ```
 3. 超链接CSS属性的排列顺序: L-V-H-A (link visited hover active)
 4. 满足定宽和块状两个条件的元素，可以通过设置```margin: 0 auto;```来实现居中
 5. table其长度根据其内文本长度决定
-
 
 ### 严格模式需要显式地引用全局作用域
 
