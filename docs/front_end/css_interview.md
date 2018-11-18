@@ -20,6 +20,7 @@
 - [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
 - [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
 - [Q: 如何进行px与em的换算?](#q-如何进行px与em的换算?)
+- [Q: nth-child和nth-of-type的区别](#q-nth-child和nth-of-type的区别)
 
 ### Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?
 
@@ -604,3 +605,18 @@ body {font-size: 62.5%;} /*  公式16px*62.5%=10px  */
 ```
 3. 这就使 1em = (16px * 62.5%) = 10px
 4. 也就是说只需要将你的原来的px数值除以10，然后换上em作为单位就行了
+
+### Q: nth-child和nth-of-type的区别
+
+1. ```ele:nth-child(n)```是指父元素下第n个元素且这个元素必须为ele
+2. ```:nth-of-type```是以"type"来区分的，也就是说：```ele:nth-of-type(n)```是指父元素下第n个ele元素
+3. ```.demo li:nth-child(2)```选择的是```<li>one</li>```节点，而```.demo li:nth-of-type(2)```则选择的是```<li>two</li>```节点
+```
+<div> 
+    <ul class="demo"> 
+        <p>zero</p> 
+        <li>one</li> 
+        <li>two</li> 
+    </ul> 
+</div>
+```
