@@ -17,6 +17,8 @@
 - [缓存的应用模式](#缓存的应用模式)
     - [模式 1: 不常变化的资源](#模式-1-不常变化的资源)
     - [模式 2: 经常变化的资源](#模式-2-经常变化的资源)
+- [如何解决因命中强缓存而导致无法呈现更新后的改动](#如何解决因命中强缓存而导致无法呈现更新后的改动)
+- [HTTP缓存基本概念](#HTTP缓存基本概念)
 
 ### Service Worker
 
@@ -72,13 +74,14 @@
     - 3.2. must-revalidate：如果超过了 max-age 的时间，浏览器必须向服务器发送请求，验证资源是否还有效
     - 3.3. no-cache：从语义上表示下次请求不要直接使用缓存而需要比对后决定
     - 3.4. no-store: 真正意义上的"不要缓存"。所有内容都不走缓存，包括强制缓存和对比缓存
-    - 3.5. public：所有的内容都可以被缓存 (包括客户端和代理服务器， 如 CDN)
+    - 3.5. public：所有的内容都可以被缓存 (包括客户端和代理服务器，如 CDN)
     - 3.6. private：所有的内容只有客户端才可以缓存，代理服务器不能缓存(默认值)
     - 3.7. 这些值可以混合使用，例如 ```Cache-control:public, max-age=2592000```
 4. 自从 HTTP/1.1 开始，Expires 逐渐被 Cache-control 取代
 5. Cache-control 是一个相对时间，即使客户端时间发生改变，相对时间也不会随之改变，这样可以保持服务器和客户端的时间一致性
 6. Cache-control 的可配置性比较强大
 7. Cache-control 的优先级高于 Expires，为了兼容 HTTP/1.0 和 HTTP/1.1，实际项目中两个字段我们都会设置
+8. 在无法确定客户端的时间是否与服务端的时间同步的情况下，Cache-Control相比于expires是更好的选择，所以同时存在时，只有Cache-Control生效
 
 ### max-age=0 和 no-cache 等价吗？
 
@@ -146,3 +149,36 @@
 
 1. 这类资源的特点是 URL 不能变化，但内容经常变化。可以设置 ```Cache-Control: no-cache``` 来迫使浏览器每次请求都必须找服务器验证资源是否有效
 2. 这种模式下，节省的并不是请求数，而是请求体的大小。所以它的优化效果不如模式 1 来的显著
+
+### 如何解决因命中强缓存而导致无法呈现更新后的改动
+
+1. 跳转时增加时间戳例如：
+```
+location.href = 'https://www.localhost:5000.com/index.html?t=201811221048001';
+```
+
+2. 修改response headers中的cache-control
+```
+cache-control: public, max-age=0
+```
+
+3. 使用HTML Meta 标签
+```
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+```
+
+4. 注意点
+    1. 上述代码只有部分浏览器可以支持，而且所有缓存代理服务器都不支持，因为代理不解析HTML内容本身。
+    2. 最好还是不要指定HTML标签，在HTML5中，这些```<meta HTTP等>```标签是无效的。只有HTML5规范中列出的HTTP等效值才被允许。
+
+### HTTP缓存基本概念
+
+1. HTTP 缓存分为：强缓存和协商缓存
+2. 缓存关键步骤
+    - 判断是否存在缓存
+    - 判断缓存是否有效(即强缓存是否命中)
+    - 请求服务端，判断服务端资源是否更新（即协商缓存是否命中）
+    - 返回资源（若服务端返回的资源，本地保存请求，包括请求头信息）
+
