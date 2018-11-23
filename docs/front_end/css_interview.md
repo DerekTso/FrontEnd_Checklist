@@ -7,6 +7,7 @@
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
 - [Q: 如何获取浏览器窗口的可见宽高?](#q-如何获取浏览器窗口的可见宽高?)
+- [Q: window.innerWidth/Height和window.outerWidth/Height的区别](#q-window.innerWidth/Height和window.outerWidth/Height的区别)
 - [Q: 如何理解getBoundingClientRect?](#q-如何理解getBoundingClientRect?)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
 - [Q: parentNode和offsetParent的区别](#q-parentNode和offsetParent的区别)
@@ -81,24 +82,24 @@
 
 1. 浏览器窗口的尺寸(就是内容部分，可见的部分，不包括工具栏和滚动条)
 2. 对于IE、Chrome、Firefox、Opera 以及 Safari
-```
-window.innerWidth: 浏览器窗口的可见宽度
-window.innerHeight: 浏览器窗口的可见高度
-```
+    - window.innerWidth: 浏览器窗口的可见宽度（不包括工具栏，但包括滚动条）
+    - window.innerHeight: 浏览器窗口的可见高度（不包括工具栏，但包括滚动条）
 3. 对于 IE 8、7、6、5
-```
-document.documentElement.clientHeight
-document.documentElement.clientWidth
-或者
-document.body.clientHeight
-document.body.clientWidth
-```
+    - document.documentElement.clientHeight: 浏览器窗口的可见宽度（不包括工具栏和滚动条）
+    - document.documentElement.clientWidth: 浏览器窗口的可见高度（不包括工具栏和滚动条）
+    - document.body.clientHeight: 浏览器窗口**内容部分/body元素**的宽度（不包括工具栏和滚动条）
+    - document.body.clientWidth: 浏览器窗口**内容部分/body元素**的高度（不包括工具栏和滚动条）
 4. 兼容所有浏览器
 ```
 var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
 var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 ```
+
+### Q: window.innerWidth/Height和window.outerWidth/Height的区别
+
+1. window.innerWidth/Height的值是可视窗口内部大小加上滚动条宽度
+2. window.outerWidth/Height的值是可视窗口整体大小包括工具栏和滚动条
 
 ### Q: 如何理解getBoundingClientRect?
 
@@ -211,7 +212,6 @@ var Y = this.getBoundingClientRect().top;
             - offsetParent为定位父级
 6. haslayout是IE7的特有只读属性，当其为true时，代表该元素有自己的布局，否则代表该元素的布局继承于父元素，可通过```element.currentStyle.hasLayout```得出当前元素的hasLayout情况。设置```zoom:1```或```overflow:hidden```等可以触发hasLayout
 7. ```document.body.offsetParent```为null
-
 
 ### Q: relative 和 absolute 分别是相对于谁进行定位的？
 
