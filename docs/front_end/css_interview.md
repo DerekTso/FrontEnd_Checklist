@@ -9,6 +9,7 @@
 - [Q: 如何获取浏览器窗口的可见宽高?](#q-如何获取浏览器窗口的可见宽高?)
 - [Q: 如何理解getBoundingClientRect?](#q-如何理解getBoundingClientRect?)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
+- [Q: parentNode和offsetParent的区别](#q-parentNode和offsetParent的区别)
 - [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: 如何理解BFC?](#q-如何理解BFC?)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
@@ -137,7 +138,12 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 
 * offsetParent / offsetLeft / offtsetTop
 
+1. offsetLeft表示元素的左外边框离offsetParent元素的左**内边框**之间的像素距离(不包含border)
+2. offsetTop表示元素的上外边框离offsetParent元素的上**内边框**之间的像素距离(不包含border)
+
 ![interview_basic_offsetLeft](../../images/interview_basic_offsetLeft.png)
+
+![interview_basic_offsetLeft_xTop_xParent](images/interview_basic_offsetLeft_xTop_xParent.png)
 
 * clientLeft / clientTop (内部与外部的相对坐标 / border)
 
@@ -167,6 +173,25 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 2. 如果滚动条的宽度是16px（不同的设备和浏览器的宽度不同），那么内容的 width 将是300 - 16 = 284px
 3. 那么 clientWidth = 2 * padding + width = 2 * 20 + 284 = 324
 ```
+
+### Q: parentNode和offsetParent的区别
+
+1. parentNode: 只读属性，返回当前元素的直接父级节点，如果没有父节点则返回 null
+2. parentElement是IE专用的，一般情况parentNode可以取代parentElement的所有功能
+3. parentElement匹配的是parent为Element的情况，而parentNode匹配的则是parent为Node的情况。Element扩展至Node，它的NodeType为1
+4. offsetParent: 只读属性，返回离当前元素最近的一个有定位属性的父节点，如果没有定位父级，默认是body，有兼容性问题
+5. offsetParent(如果body和html的margin被清掉的情况下)
+    - 元素本身定位 为 fixed：
+        - offsetParent为null(不是火狐)，offsetLeft/offsetTop也参照于body
+        - offsetParent为body(是火狐)
+    - 元素本身定位 不为 fixed：
+        - 父级 没有 定位：
+            - offsetParent为body
+        - 父级 有 定位：
+            - offsetParent为定位父级
+6. haslayout是IE7的特有只读属性，当其为true时，代表该元素有自己的布局，否则代表该元素的布局继承于父元素，可通过```element.currentStyle.hasLayout```得出当前元素的hasLayout情况。设置```zoom:1```或```overflow:hidden```等可以触发hasLayout
+7. ```document.body.offsetParent```为null
+
 
 ### Q: relative 和 absolute 分别是相对于谁进行定位的？
 
