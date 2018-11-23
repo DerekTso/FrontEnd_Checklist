@@ -292,8 +292,14 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 
 * display:none
 
-1. display:none: 该对象被隐藏且在页面上彻底消失，看不见也摸不到
-2. visible:hidden: 该对象被隐藏但在页面上所占的空间不变，看不见但摸得到
+1. display:none
+    - 该对象被隐藏且在页面上彻底消失，看不见也摸不到
+    - 渲染树上不会有该对象，但是DOM树上该对象还是存在的
+    - 该对象的子元素也不会出现在页面中，即使子元素设置如```display:block;```也是无济于事
+2. visibility:hidden
+    - 该对象被隐藏但在页面上所占的空间不变，看不见但摸得到
+    - 渲染树和DOM树上都有该对象
+    - 该对象的子元素允许覆盖值，子元素设置```visibility:visible;```后可见
 
 * display:block
 
