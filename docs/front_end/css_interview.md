@@ -6,7 +6,7 @@
 - [Q: HTML5 有哪些新特性?](#q-HTML5-有哪些新特性?)
 - [Q: HTML5 的存储方案有哪些?](#q-HTML5-的存储方案有哪些?)
 - [Q: native页面和H5页面的区别](#q-native页面和H5页面的区别)
-- [Q: 如何获取浏览器窗口的可见宽高?](#q-如何获取浏览器窗口的可见宽高?)
+- [Q: window.innerWidth/document.documentElement.clientWidth/document.body.clientWidth的区别](#q-window.innerWidth/document.documentElement.clientWidth/document.body.clientWidth的区别)
 - [Q: window.innerWidth/Height和window.outerWidth/Height的区别](#q-window.innerWidth/Height和window.outerWidth/Height的区别)
 - [Q: 如何理解getBoundingClientRect?](#q-如何理解getBoundingClientRect?)
 - [Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别](#q-offsetwidthoffsetheightclientwidthclientheight-和-scrollwidthscrollheight-之间的区别)
@@ -78,28 +78,17 @@
 3. 只能使用有限的设备底层功能（无法使用摄像头、方向传感器、重力传感器、拨号、GPS、语音、短信、蓝牙等功能）
 4. 仍处于发展阶段，部分功能无法在基于现有技术的浏览器基础上实现，且无法全面的显示最完美的用户体验，只能用现有技术去弥去找最佳解决方案
 
-### Q: 如何获取浏览器窗口的可见宽高?
+### Q: window.innerWidth/document.documentElement.clientWidth/document.body.clientWidth的区别
 
-1. 浏览器窗口的尺寸(就是内容部分，可见的部分，不包括工具栏和滚动条)
-2. 对于IE、Chrome、Firefox、Opera 以及 Safari
-    - window.innerWidth: 浏览器窗口的可见宽度（不包括工具栏，但包括滚动条）
-    - window.innerHeight: 浏览器窗口的可见高度（不包括工具栏，但包括滚动条）
-3. 对于 IE 8、7、6、5
-    - document.documentElement.clientHeight: 浏览器窗口的可见宽度（不包括工具栏和滚动条）
-    - document.documentElement.clientWidth: 浏览器窗口的可见高度（不包括工具栏和滚动条）
-    - document.body.clientHeight: 浏览器窗口**内容部分/body元素**的宽度（不包括工具栏和滚动条）
-    - document.body.clientWidth: 浏览器窗口**内容部分/body元素**的高度（不包括工具栏和滚动条）
-4. 兼容所有浏览器
-```
-var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-
-var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-```
+- ```window.innerWidth```: 浏览器窗口的可见宽度（不包括工具栏，但包括滚动条）
+- ```document.body.clientWidth```: 浏览器窗口**内容部分/body元素**的宽度（不包括工具栏和滚动条）
+- ```document.documentElement.clientWidth```: 浏览器窗口的可见宽度（不包括工具栏和滚动条）
+- 一般要获取浏览器窗口的可见宽度，选择使用```document.documentElement.clientWidth```
 
 ### Q: window.innerWidth/Height和window.outerWidth/Height的区别
 
-1. window.innerWidth/Height的值是可视窗口内部大小加上滚动条宽度
-2. window.outerWidth/Height的值是可视窗口整体大小包括工具栏和滚动条
+- ```window.innerWidth/Height```的值是可视窗口内部大小加上滚动条宽度
+- ```window.outerWidth/Height```的值是可视窗口整体大小包括工具栏和滚动条
 
 ### Q: 如何理解getBoundingClientRect?
 
@@ -140,9 +129,17 @@ var Y = this.getBoundingClientRect().top;
 
 ### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
 
-1. offsetWidth/offsetHeight 返回值包含 content + padding + border + 滚动条，效果与ele.getBoundingClientRect()相同
+1. offsetWidth/offsetHeight 返回值包含 content + padding + border + 滚动条
 2. clientWidth/clientHeight 返回值只包含 content + padding，如果有滚动条，也不包含滚动条
 3. scrollWidth/scrollHeight 返回值包含 content + padding + 溢出内容的尺寸(因滚动被隐藏的部分)
+
+* clientWidth / offsetWidth
+
+1. clientWidth 表示 padding box(content + padding-left/right 的宽度，不包含滚动条)
+2. offsetWidth 表示 border box(padding box + border + 滚动条的宽度)
+3. document.documentElement.clientWidth 表示 浏览器窗口的可见宽度（不包括工具栏和滚动条），不表示 padding box 的宽度
+4. document.documentElement.offsetWidth 还是表示 border box 的宽度
+5. 在IE10或以下，clientWidth 和 offsetWidth 被统一指定为浏览器窗口的可见宽度
 
 * offsetWidth / clientWidth / scrollWidth
 
