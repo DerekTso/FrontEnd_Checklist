@@ -143,17 +143,26 @@ var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
 
 ![interview_basic_offsetLeft](../../images/interview_basic_offsetLeft.png)
 
-![interview_basic_offsetLeft_xTop_xParent](images/interview_basic_offsetLeft_xTop_xParent.png)
+![interview_basic_offsetLeft_xTop_xParent](../../images/interview_basic_offsetLeft_xTop_xParent.png)
 
 * clientLeft / clientTop (内部与外部的相对坐标 / border)
 
 ![interview_basic_clientLeft](../../images/interview_basic_clientLeft.png)
 
-* scrollTop / scrollHeight
+* scrollLeft / scrollTop
 
-1. 元素的 scrollTop 值是这个元素的顶部到它的最顶部可见内容的顶部的距离的度量
-2. 大多数几何结构属性都是只读的，但是 scrollLeft 和 scrollTop 是可更改的
+1. 大多数几何结构属性都是只读的，但是 scrollLeft 和 scrollTop 是可更改的
+2. scrollLeft 和 scrollTop 表示滚动条滚动时，元素滚动的距离
 3. 如果将 scrollTop 设置为 0 或 Infinity 将会使元素分别滚动到浏览器的最顶端和最底端
+4. 获取页面的垂直与水平滚动条的位置
+    - 使用 "||" 逻辑语句将这两种获取方式相连，以保证兼容性
+    ```
+    var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    ```
+    - 在 IE6 IE7 IE8 Firefox Opera 中，标准模式下分别使用 ```document.documentElement.scrollTop``` 及 ```document.documentElement.scrollLeft``` 获取页面的垂直与水平滚动条的位置，混杂模式下使用 ```document.body.scrollTop``` 及 ```document.body.scrollLeft``` 获取页面的垂直与水平滚动条的位置
+    - 在 Chrome Safari 中，标准模式与混杂模式下均使用 ```document.body.scrollTop``` 及 ```document.body.scrollLeft``` 获取页面的垂直与水平滚动条的位置
+    - ```document.documentElement``` 对应的是 html 标签，而 ```document.body``` 对应的是 body 标签
 
 ![interview_basic_scrollTop](../../images/interview_basic_scrollTop.png)
 
