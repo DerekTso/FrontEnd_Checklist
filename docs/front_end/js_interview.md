@@ -24,6 +24,7 @@
 - [Q: for of 与 for in的区别](#q-for-of-与-for-in的区别)
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
+- [Q: 如何理解事件绑定的兼容性问题](#q-如何理解事件绑定的兼容性问题)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
@@ -649,6 +650,66 @@ for (var key in myObject) {
 4. requestAnimationFrame 会把每一帧中的所有DOM操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率
 5. 在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的CPU、GPU和内存使用量
 6. requestAnimationFrame 是由浏览器专门为动画提供的API，在运行时浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销
+
+### Q: 如何理解事件绑定的兼容性问题
+
+* IE浏览器
+
+1. obj.attachEvent(事件名称, 事件函数);
+2. 非标准IE没有捕获(标准IE有捕获, IE6->IE8)
+3. 事件名称有on(e.g. ```document.attachEvent('onclick', fn);```)
+4. 事件函数执行的顺序:标准IE正序，非标准IE倒序
+5. this指向window，可通过call改变this的指向
+```
+document.attachEvent('onclick', function(){
+  fn1.call(document);
+});
+```
+
+* 标准IE/Chrome/FF等
+
+1. obj.addEventListener(事件名称, 事件函数, 是否捕获);
+2. 有捕获(默认为false；false:冒泡, true:捕获)
+3. 事件名称没有on(e.g. ```document.addEventListener('click', fn, false);```)
+4. 事件执行的顺序为正序
+5. this指向触发该事件的对象
+
+* 同步this指向
+
+```
+function bind(obj, evname, fn) {
+  if (obj.addEventListener) {
+    obj.addEventListener(evname, fn, false);
+  } else {
+    obj.attachEvent('on' + evname, function() {
+      fn.call(obj);
+    });
+  }
+}
+bind(document, 'click', fn1);
+```
+
+* 事件流
+
+1. 捕获 -> 目标处理 -> 冒泡
+2. 捕获和冒泡的前提是 有嵌套的DOM结构
+3. 没有嵌套的DOM结构，设置了捕获和冒泡也没用，都在**目标处理**阶段处理
+
+* 事件绑定
+
+1. DOM0: 一个元素上只能绑定一个同类事件，如果继续绑定的话，第二个事件函数会覆盖第一个
+2. DOM2: 一个元素上可以绑定多个同类事件，它们都会被执行
+
+* 事件解绑
+
+1. DOM0: document.onclick = null;
+2. DOM2: document.removeEventListener("事件名称", "事件回调", "捕获/冒泡"); / IE下: document.detachEvent();
+
+* 总结
+
+1. onclick形式：冒泡
+2. attachEvent形式：冒泡
+3. addEventListener：第三个参数(false:冒泡；true:捕获)
 
 ### Q: 如何实现一个 bind 函数
 
