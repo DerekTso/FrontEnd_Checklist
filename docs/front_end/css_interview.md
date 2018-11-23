@@ -102,7 +102,7 @@ var h = window.innerHeight || document.documentElement.clientHeight || document.
 
 ### Q: 如何理解getBoundingClientRect?
 
-1. getBoundingClientRect()返回一个矩形对象，包含四个属性：top，right, bottom, left，分别表示元素各边与页面上边和左边的距离
+1. getBoundingClientRect()返回一个矩形对象(DOMRect对象)，包含四个只读属性：top，right, bottom, left，它们都是相对位置，分别表示元素各边相对于视口的**左上角**位置的距离(与页面上边和左边的距离)
 2. 在IE中，默认坐标从(2,2)开始计算，导致最终距离比其他浏览器多出两个像素
 ```
 function getRect (element) {
@@ -116,14 +116,25 @@ function getRect (element) {
         right  :   rect.right - left
     }
 }
-// width: rect.width || right - left;
-// Height: rect.height || bottom - top;
 ```
-3. 获取页面元素的位置
+3. width / height 是 border-box的尺寸，包含了border的大小
 ```
-var X = this.getBoundingClientRect().left + document.documentElement.scrollLeft;
+width: rect.width || right - left; // 因IE6,7,8没有width属性，做兼容
+height: rect.height || bottom - top; // 因IE6,7,8没有height属性，做兼容
+```
+4. 获取页面元素的位置
+```
+// 清掉html/body的margin，将其设为0
 
-var Y = this.getBoundingClientRect().top + document.documentElement.scrollTop;
+// 获取页面元素的绝对位置(到body的距离)
+var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+var X = this.getBoundingClientRect().left + scrollLeft;
+var Y = this.getBoundingClientRect().top + scrollTop;
+
+// 获取页面元素的相对位置(到视口的距离)
+var X = this.getBoundingClientRect().left;
+var Y = this.getBoundingClientRect().top;
 ```
 
 ### Q: offsetWidth/offsetHeight、clientWidth/clientHeight 和 scrollWidth/scrollHeight 之间的区别
