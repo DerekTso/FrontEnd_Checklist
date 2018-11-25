@@ -25,6 +25,7 @@
 - [Q: mouseover 和 mouseenter 的区别](#q-mouseover-和-mouseenter-的区别)
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: 如何理解事件绑定的兼容性问题](#q-如何理解事件绑定的兼容性问题)
+- [Q: 如何理解鼠标滚轮事件的兼容性问题](#q-如何理解鼠标滚轮事件的兼容性问题)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
@@ -711,6 +712,67 @@ bind(document, 'click', fn1);
 2. attachEvent形式：冒泡
 3. addEventListener：第三个参数(false:冒泡；true:捕获)
 
+### Q: 如何理解鼠标滚轮事件的兼容性问题
+
+1. IE/Chrome
+    1. DOM0: onmousewheel
+    2. mousewheel事件对应的event对象会有一个wheelDelta属性
+    3. 向上滚动时wheelDelta属性的值是120的整数倍
+    4. 向下滚动时wheelDelta属性的值是-120的整数倍
+    5. ```return false```阻止默认行为
+2. Firefox
+    1. DOM2: DOMMouseScroll，必须用addEventListener绑定该事件
+    2. DOMMouseScroll事件对应的event对象会有一个detail属性
+    3. 向上滚动时detail属性的值是-3的整数倍
+    4. 向下滚动时detail属性的值是3的整数倍
+    5. ```e.preventDefault()```阻止默认行为
+3. 鼠标滚轮的兼容写法
+```
+var addMouseWheelHandler = function(){
+    if (document.addEventListener) {
+        document.addEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
+        document.addEventListener('wheel', MouseWheelHandler, false); //Firefox
+        document.addEventListener('DOMMouseScroll', MouseWheelHandler, false); //Old Firefox
+    } else {
+        document.attachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
+    }
+},
+removeMouseWheelHandler = function(){
+    if (document.addEventListener) {
+        document.removeEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
+        document.removeEventListener('wheel', MouseWheelHandler, false); //Firefox
+        document.removeEventListener('DOMMouseScroll', MouseWheelHandler, false); //old Firefox
+    } else {
+        document.detachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
+    }
+},
+stopDefault = function(e) { 
+    //W3C
+    if ( e && e.preventDefault ) {
+        e.preventDefault(); 
+    } else {
+    //IE 
+      window.event.returnValue = false; 
+    }
+    return false; 
+},
+MouseWheelHandler = function(e) {//滚动后的处理函数
+    stopDefault(e);
+    var e = e || window.event,
+        value = e.wheelDelta || -e.deltaY || -e.detail,
+        delta = Math.max(-1, Math.min(1, value));
+    if (delta < 0) {//scrolling down
+        console.log("下滑")
+    } else {//scrolling up
+     	  console.log("上滑")    
+    }
+};
+ 
+//调用
+addMouseWheelHandler();
+</script>
+```
+
 ### Q: 如何实现一个 bind 函数
 
 ```
@@ -800,15 +862,15 @@ Function.prototype.myInstanceof = function (A, B) {
 ### Q: 如何理解箭头函数中的this
 
 1. 传统函数的 this 是动态的。它取决于 this 怎样被调用
-    1. this总是代表它的直接调用者，例如 obj.func，那么func中的this就是obj
-    2. 在默认情况(非严格模式下，未使用 'use strict')，没找到直接调用者，则this指的是 window
+    - this总是代表它的直接调用者，例如 obj.func，那么func中的this就是obj
+    - 在默认情况(非严格模式下，未使用 ```'use strict'``` )，没找到直接调用者，则this指的是 window
     ```
     function test() {
       console.log(this); // window
     }
     test();
     ```
-    3. 在严格模式下，没有直接调用者的函数中的this是 undefined
+    - 在严格模式下，没有直接调用者的函数中的this是 undefined
     ```
     function test() {
       'use strict';
@@ -816,7 +878,7 @@ Function.prototype.myInstanceof = function (A, B) {
     }
     test();
     ```
-    4. 使用call，apply，bind绑定的函数中，this指的是绑定的对象
+    - 使用call，apply，bind绑定的函数中，this指的是绑定的对象
     ```
     var obj = {
         say: function () {
