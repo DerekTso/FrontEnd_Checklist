@@ -13,11 +13,12 @@
 - [Q: parentNode和offsetParent的区别](#q-parentNode和offsetParent的区别)
 - [Q: relative 和 absolute 分别是相对于谁进行定位的?](#q-relative-和-absolute-分别是相对于谁进行定位的)
 - [Q: 如何理解BFC?](#q-如何理解BFC?)
+- [Q: 如何理解CSS选择器的特殊性与重要性?](#q-如何理解CSS选择器的特殊性与重要性?)
 - [Q: 什么是CSS盒模型?](#q-什么是-CSS-盒模型?)
 - [Q: 如何理解CSS中的float属性?](#q-如何理解CSS中的float属性?)
 - [Q: 如何理解CSS中的display属性?](#q-如何理解CSS中的display属性?)
 - [Q: 如何去除inline-block元素间距?](#q-如何去除inline-block元素间距?)
-- [Q: 如何理解list-style:none outside none的作用](#q-如何理解list-style:none-outside-none的作用)
+- [Q: 如何理解list-style:none outside none的作用?](#q-如何理解list-style:none-outside-none的作用?)
 - [Q: 如何居中布局?](#q-如何居中布局?)
 - [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
 - [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
@@ -279,6 +280,41 @@ var Y = this.getBoundingClientRect().top;
     2. 清除内部浮动 
     3. 防止垂直margin重叠
 
+### Q: 如何理解CSS选择器的特殊性与重要性?
+
+* 特殊性(CSS Specificity)
+
+![interview_basic_css_specificity.png](../../images/interview_basic_css_specificity.png)
+
+1. 每个元素或伪元素选择器贡献特殊性为 0，0，0，1
+2. 每个类、伪类或者属性选择器的特殊性为 0，0，1，0
+3. 每个ID选择器的特殊性为 0，1，0，0
+4. 结合符和通配符的对特殊性没有贡献 
+5. 比较选择器特殊性高低直接从左向右依次比较，数字大的则优先级更高，如果相同就比较下一位，所有位都相同则后申明的样式会覆盖前面申明的样式
+6. 每个级别的优先级值是相互独立的，13个元素选择器写在一堆也不会比1个类选择器的特殊性高
+7. 第一个0是用于行内样式的，且仅用于行内样式
+```
+<nav style="background-color: gray;"></nav> <!-- 1,0,0,0 -->
+```
+
+* 重要性(!important)
+
+1. ```!important```可以无视特殊性，使用 ```!important``` 可以把任何样式规则标记为重要
+2. 基本上，任何重要的样式规则都可以覆盖没有标记为重要的样式规则
+3. IE6 是支持 ```!important``` 的，但在同一个选择器中，在标记为重要的样式规则之后又重新定义了此样式则 ```!important``` 将失效
+```
+.header {
+  color: red !important;     /* 标准浏览器 red */
+  color: green;              /* IE6 green !important 失效 */
+}
+```
+4.  IE6/7 可以允许在 ```!important``` 后面添加一些文字，依然能识别
+```
+.header {
+  color: red !important ie;     /* ie6/7 red */
+}
+```
+
 ### Q: 什么是 CSS 盒模型?
 
 * 标准盒子模型
@@ -451,7 +487,7 @@ html{
 </div>
 ```
 
-### Q: 如何理解```list-style:none outside none;```的作用
+### Q: 如何理解```list-style:none outside none;```的作用?
 
 1. 当ul浮动后```float: left;```，需要加上```display:inline;```来解决在IE6中的双倍边距问题
 ```
