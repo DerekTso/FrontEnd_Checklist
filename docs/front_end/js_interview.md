@@ -701,10 +701,83 @@ bind(document, 'click', fn1);
 1. DOM0: 一个元素上只能绑定一个同类事件，如果继续绑定的话，第二个事件函数会覆盖第一个
 2. DOM2: 一个元素上可以绑定多个同类事件，它们都会被执行
 
+```
+var addEvent = (function () { 
+    if (document.addEventListener) { 
+        return function (el, type, fn) { 
+            el.addEventListener(type, fn, false); 
+        }; 
+    } else { 
+        return function (el, type, fn) { 
+            el.attachEvent('on' + type, function () { 
+                return fn.call(el, window.event); 
+            }); 
+        } 
+    } 
+})();
+```
+
 * 事件解绑
 
 1. DOM0: document.onclick = null;
 2. DOM2: document.removeEventListener("事件名称", "事件回调", "捕获/冒泡"); / IE下: document.detachEvent();
+
+```
+var removeEvent = function(obj, type, fn) {
+    if (obj.removeEventListener) {
+        obj.removeEventListener( type, fn, false );
+    } else if (obj.detachEvent) {
+        obj.detachEvent('on' + type, fn);
+    }
+}
+```
+
+* 绑定匿名函数，无法解绑事件
+
+```
+window.onload = function() {
+    var oBtn = document.getElementById("btn");
+    oBtn.attachEvent("onclick", function() {
+        alert("a");
+    });
+    // 无法解绑
+    oBtn.detachEvent("onclick", function() {
+        alert("a");
+    });
+
+    var func = function() {
+        alert("a");
+    };
+    // 可以解绑
+    oBtn.attachEvent("onclick", func);
+    oBtn.detachEvent("onclick", func);
+};
+```
+
+* 阻止默认事件
+
+```
+var cancelEvent = function(ev)) {
+    ev = ev || window.event;
+    if (ev.preventDefault) {
+        ev.preventDefault();
+        ev.stopPropagation();
+    } else {
+        ev.returnValue = false;
+        ev.cancelBubble = true;
+    }
+}
+```
+
+* 取得事件源对象
+
+```
+var getTarget = function(ev){
+    ev = ev || window.event;
+    var obj = ev.srcElement ? ev.srcElement : ev.target;
+    return obj
+}
+```
 
 * 总结
 
@@ -713,6 +786,8 @@ bind(document, 'click', fn1);
 3. addEventListener：第三个参数(false:冒泡；true:捕获)
 
 ### Q: 如何理解鼠标滚轮事件的兼容性问题
+
+![interview_basic_mousewheel](../../images/interview_basic_mousewheel.png)
 
 1. IE/Chrome
     1. DOM0: onmousewheel

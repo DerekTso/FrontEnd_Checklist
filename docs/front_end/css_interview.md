@@ -92,7 +92,7 @@
 
 ### Q: 如何理解getBoundingClientRect?
 
-1. getBoundingClientRect()返回一个矩形对象(DOMRect对象)，包含四个只读属性：top，right, bottom, left，它们都是相对位置，分别表示元素各边相对于视口的**左上角**位置的距离(与页面上边和左边的距离)
+1. getBoundingClientRect()返回一个矩形对象(DOMRect对象)，包含四个只读属性：top，right, bottom, left，它们都是相对位置，分别表示border box元素各边相对于视口的**左上角**位置的距离(与页面上边和左边的距离)
 2. 在IE中，默认坐标从(2,2)开始计算，导致最终距离比其他浏览器多出两个像素
 ```
 function getRect (element) {
