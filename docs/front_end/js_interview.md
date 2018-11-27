@@ -37,6 +37,7 @@
 - [Q: sessionStorage 和 localStorage 的区别](#q-sessionStorage-和-localStorage-的区别)
 - [Q: 如何理解ajax的原理和运行机制](#q-如何理解ajax的原理和运行机制)
 - [Q: axios和ajax的区别](#q-axios和ajax的区别)
+- [Q: 如何理解Promise的原理和运行机制](#q-如何理解Promise的原理和运行机制)
 - [Q: 如何理解 V8 引擎字节码](#q-如何理解-V8-引擎字节码)
 
 ### 服务器相关
@@ -1130,6 +1131,81 @@ xmlhttp.onreadystatechange = function() {
     6. 取消请求
     7. 自动转换JSON数据
     8. 客户端支持防止CSRF/XSRF
+
+### Q: 如何理解Promise的原理和运行机制
+
+1. Promise的三种状态：pending、fulfilled、rejected
+2. 同一时间只能存在一种状态，并且状态一旦改变就不能再变
+    - 初始化，状态：pending
+    - 当调用resolve(成功)，状态：pengding => fulfilled
+    - 当调用reject(失败)，状态：pending => rejected
+3. ES6规定，Promise对象是一个构造函数，接受一个函数作为参数，用来生成Promise实例，该函数的两个参数分别是resolve和reject，它们是两个函数
+```
+var promise = new Promise(function(resolve,reject){
+  // ... some code
+  if(/* 异步操作成功 */){
+    resolve(value);
+  }else{
+    reject(error);
+  }
+});
+```
+4. Promise实例生成以后，可以用then方法分别制定resolved状态和rejected状态的回调函数，then方法可以接受2个回调函数作为参数，第二个函数是可选的
+```
+promise.then(function(value){
+  // sucess
+}, function(error){
+  // failure
+});
+```
+5. 异步加载图片的例子
+```
+function loadImageAsync(url){
+  return new Promise(function(resolve,reject){
+    var image = new Image();
+    image.onload = function(){
+      resolve(image);
+    };
+    image.onerror = function(){
+      reject(new Error('Could not load image at' + url));
+    };
+
+    image.src = url;
+  });
+}
+```
+6. 用Promise对象实现Ajax操作的例子
+```
+var getJSON = function(url){
+  var promise = new Promise(function(resolve,reject){
+    var client = new XMLHttpRequest();
+    client.open('GET',url);
+    client.onreadystatechange = handler;
+    client.responseType = 'json';
+    client.setRequestHeader('Accept','application/json');
+    client.send();
+
+    function handler(){
+      if(this.readyState !== 4){
+        return;
+      }
+      if(this.status === 200){
+        resolve(this.response);
+      }else{
+        reject(new Error(this.statusText));
+      }
+    }
+  });
+
+  return promise;
+};
+
+getJSON('/posts.json').then(function(json){
+  consoloe.log(json);
+},function(error){
+  console.log('出错了');
+});
+```
 
 ### Q: 如何理解 V8 引擎字节码
 
