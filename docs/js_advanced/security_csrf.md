@@ -35,7 +35,7 @@ module.exports = class CheckReferer {
     const referer = this.ctx.referer();
     const {host: refererHost} = parse(referer);
     if(refererHost !== 'xxx') {
-return this.fail('REFERER_ERROR');
+      return this.fail('REFERER_ERROR');
     }
   }
 }
