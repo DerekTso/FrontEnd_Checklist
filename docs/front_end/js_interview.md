@@ -1373,7 +1373,26 @@ function send() {
 2. 跨域是一种安全机制，用于隔离潜在恶意文件
 3. 解决跨域的方法
     1. jsonp: 由于jsonp请求是通过script的方式发送的（只有xhr的请求方式才有可能产生跨域问题），所以不会产生跨域问题。前台使用ajax的get请求，将dataType设为"jsonp"；使用jsonp的弊端: 只能使用get方式请求，服务器需要改动代码，发送的不是xhr请求
-    2. nginx 反向代理（nginx 服务内部配置 Access-Control-Allow-Origin *）
+    2. nginx 反向代理（nginx 服务内部配置相应的 proxy_pass）
+    ```
+    server {
+        listen       80; #监听80端口，可以改成其他端口
+        server_name  localhost; #当前服务的域名
+
+        #charset koi8-r;
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass http://localhost:81;
+            proxy_redirect default;
+        }
+
+        location /apis { #添加访问目录为/apis的代理配置
+          rewrite  ^/apis/(.*)$ /$1 break;
+          proxy_pass   http://localhost:82;
+        }
+    }
+    ```
     3. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
     4. postMessage: HTML5中的XMLHttpRequest Level 2中的API
     5. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
