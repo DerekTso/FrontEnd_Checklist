@@ -226,16 +226,14 @@ module.exports = {
   module: {
     rules: [{
       test: /\.css$/,
-      use: [{
-loader: 'style-loader'
-      }, {
-loader: 'css-loader'
-      }, {
-loader: 'px2rem-loader',
-options: {
-  remUni: 75,
-  remPrecision: 8
-}
+      use: [
+        {loader: 'style-loader'}, 
+        {loader: 'css-loader'},
+        {loader: 'px2rem-loader',
+            options: {
+            remUni: 75,
+            remPrecision: 8
+        }
       }]
     }]
   }
@@ -251,8 +249,8 @@ module.exports = {
   module: {
     loaders: [
       {
-test: /\.css$/,
-loader: "style-loader!css-loader!postcss-loader"
+        test: /\.css$/,
+        loader: "style-loader!css-loader!postcss-loader"
       }
     ]
   },

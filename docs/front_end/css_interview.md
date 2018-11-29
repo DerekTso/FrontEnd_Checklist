@@ -22,6 +22,7 @@
 - [Q: 如何理解list-style:none outside none的作用?](#q-如何理解list-style:none-outside-none的作用?)
 - [Q: 如何居中布局?](#q-如何居中布局?)
 - [Q: 如何实现绝对居中布局?](#q-如何实现绝对居中布局?)
+- [Q: 如何实现圣杯布局?](#q-如何实现圣杯布局?)
 - [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
 - [Q: 如何进行px与em的换算?](#q-如何进行px与em的换算?)
 - [Q: nth-child和nth-of-type的区别](#q-nth-child和nth-of-type的区别)
@@ -620,6 +621,60 @@ div {
      -moz-transform:translate(-50%, -50%);
           transform:translate(-50%, -50%);
 }
+```
+
+### Q: 如何实现圣杯布局?
+
+1. 圣杯布局是两边容器的宽度固定，中间的容器宽度自适应的布局
+2. 外面的包裹容器设置左右padding，为左右两边的容器预留位置
+3. 包裹容器里面放置三个容器，先放显示内容的中间容器，再放左，右两边的
+4. 包裹容器里面的三个容器设置为相对定位，左浮动
+5. 中间的容器设置宽度为100%
+6. 左边的容器设置margin-left为-100%，挤到最左边，left定位为负的容器宽度大小
+7. 右边的容器设置margin-left为负的容器宽度大小，right定位也为负的容器宽度大小
+8. 具体代码实现如下
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>圣杯布局</title>
+    <style>
+    *{margin:0;padding:0;}
+    body{background-color: #cccc;text-align:center;}
+    header{height:50px;background-color: pink;line-height:50px;}
+    .container{padding:0 220px 0 200px;}
+    .middle,.left,.right{
+        position:relative;
+        float: left;
+        min-height: 300px;
+    }
+    .middle{background-color: red;width:100%;}
+    .left{width:200px;background-color: yellow;margin-left:-100%;left:-200px;}
+    .right{width:220px;background-color: blue;margin-left:-220px;right:-220px;}
+    </style>
+</head>
+<body>
+<header>
+    <h2>我是header</h2>
+</header>
+<div class="container">
+    <div class="middle">
+        <h4>我是middle</h4>
+        <p>我是内容部分我是内容部分我是内容部分我是内容部分我是内容部分我是内容部分我是内容部分我是内容部分</p>
+    </div>
+    <div class="left">
+        <h4>我是left</h4>
+        <p>我是left的内容</p>
+    </div>
+    <div class="right">
+        <h4>我是right的内容</h4>
+        <p>我是right的内容</p>
+    </div>
+</div>
+    
+</body>
+</html>
 ```
 
 ### Q: 如何用纯css实现小箭头?
