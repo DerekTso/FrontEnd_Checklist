@@ -643,7 +643,8 @@ div {
     *{margin:0;padding:0;}
     body{background-color: #cccc;text-align:center;}
     header{height:50px;background-color: pink;line-height:50px;}
-    .container{padding:0 220px 0 200px;}
+    footer{height:50px;background-color: green;line-height:50px;}
+    .container{padding:0 220px 0 200px; overflow: hidden;}
     .middle,.left,.right{
         position:relative;
         float: left;
@@ -672,7 +673,9 @@ div {
         <p>我是right的内容</p>
     </div>
 </div>
-    
+<footer>
+    <h2>我是footer</h2>
+</footer>
 </body>
 </html>
 ```
