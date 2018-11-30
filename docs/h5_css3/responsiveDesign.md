@@ -193,7 +193,7 @@ rem是一个灵活的、可扩展的单位，由浏览器转化像素并显示
 与em单位不同，rem单位无论嵌套层级如何，都只相对于浏览器的根元素(HTML元素)的font-size
 
 // 默认情况下，html元素的 font-size 为16px，所以：
-1 rem = 12px
+1 rem = 16px
 // 为了计算方便，通常将html的font-size设置成：
 html{ font-size: 62.5% }
 // 这种情况下：
