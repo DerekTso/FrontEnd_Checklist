@@ -1369,10 +1369,51 @@ function send() {
 
 ### Q: 跨域问题
 
+* 发生跨域的三个必要条件
+
+1. 浏览器限制： 即浏览器对跨域行为进行检测和阻止
+2. 触发跨域的三要素之一： 即 协议，域名和端口三个条件满足其一
+3. 发起的是xhr请求： 即发起的是XMLHttpRequest类型的请求
+
+其实**xhr请求**才是设计者们设计跨域的最关键的条件因素，并且只有同时满足三个条件才能触发跨域问题。
+
+* 为什么 JSONP 可以解决跨域问题
+
+1. JSONP(json with padding)方案原理就是通过动态创建script标签，利用标签内**src属性**发送同步请求，并利用回调函数的方式实现异步数据的回调从而完成与后台交互的功能
+2. JSONP发出去的请求类型是(script，img标签**src属性**发出去的请求类型)是JSON，他们都不是 xhr， 因为没有形成跨域的第三个条件，因此不会触发浏览器跨域检查策略
+
+* 浏览器实现跨域判断的办法
+
+1. 当浏览器发现发起的是一个跨域的请求时，它会向请求头里增加一个Origin字段，当请求被响应时，浏览器会检查响应头里有没有设置允许跨域的信息，如果没有，它就会报错
+2. 如果给请求增加头信息如contentType: application/json;charset=utf-8，那么contentType也是会被加入到请求头里作为跨域检查信息的
+3. 浏览器在执行跨域请求时，如果遇到是简单请求，则先执行后判断；
+4. 如果是非简单请求，则先使用OPTION发起一个预检请求(preflight request)，从而获知服务器是否允许该跨域访问，如果允许，就在此发起带真实数据的请求，否则不发起
+5. 常见**简单请求**主要有一下几种：1. GET / 2. HEAD / 3. POST且它的Content-Type为text/plain或multipart/form-data或application/x-www-form-urlencoded中的一种
+6. 常见**非简单请求**主要有一下几种：1. PUT / 2. DELETE / 3. OPTIONS / 4. 发送json格式的ajax请求 / 5. 带自定义Header信息的ajax请求 / 6. CONNECT / 7. TRACE / 8. PATCH 等
+
+* 反向代理
+
+1. 正向代理：利用代理客户端去请求服务器，从而隐藏了真实的客户端，服务器并不知道客户端是谁。客户端必须要进行一些特别的设置才能使用正向代理
+4. 反向代理: 反向代理隐藏了真正的服务端。常用ngnix来做反向代理服务器，性能很好，可做负载均衡
+![interview_basic_reverse_proxy.png](../../images/interview_basic_reverse_proxy.png)
+
+* 浏览器的跨域问题
+
 1. 浏览器的同源策略导致了跨域
 2. 跨域是一种安全机制，用于隔离潜在恶意文件
 3. 解决跨域的方法
     1. jsonp: 由于jsonp请求是通过script的方式发送的（只有xhr的请求方式才有可能产生跨域问题），所以不会产生跨域问题。前台使用ajax的get请求，将dataType设为"jsonp"；使用jsonp的弊端: 只能使用get方式请求，服务器需要改动代码，发送的不是xhr请求
+      ```
+      $.ajax({
+        url: base + "/get1",
+        dataType: "jsonp",
+        jsonp: 'callback',   // 默认jsonp协议的约定就是callback作为回调函数，一般不修改
+        cache: false,   // 默认为false，结果不能被缓存，它会在请求上添加随机数参数
+        success: function(json) {
+          result = json
+        }
+      })
+      ```
     2. nginx 反向代理（nginx 服务内部配置相应的 proxy_pass）
     ```
     server {
@@ -1393,13 +1434,12 @@ function send() {
         }
     }
     ```
-    3. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
-    4. postMessage: HTML5中的XMLHttpRequest Level 2中的API
-    5. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
-    6. 凡是拥有scr这个属性的标签都可以跨域例如```<script><img><iframe>```
+    1. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
+    2. postMessage: HTML5中的XMLHttpRequest Level 2中的API
+    3. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
+    4. 凡是拥有scr这个属性的标签都可以跨域例如```<script><img><iframe>```
 4. localhost和127.0.0.1虽然都指向本机，但也属于跨域
 5. 总结: 跨域指的是浏览器不能执行其他网站的脚本，它是由浏览器的同源策略造成的，是浏览器施加的安全限制
-
 
 ### Q: GET 和 POST 的区别
 
