@@ -25,6 +25,7 @@
 - [Q: 如何实现圣杯布局?](#q-如何实现圣杯布局?)
 - [Q: 如何用纯css实现小箭头?](#q-如何用纯css实现小箭头?)
 - [Q: 如何理解em/rem/px的关系?](#q-如何理解em/rem/px的关系?)
+- [Q: 如何解决移动端1像素边框问题?](#q-如何解决移动端1像素边框问题?)
 - [Q: nth-child和nth-of-type的区别](#q-nth-child和nth-of-type的区别)
 
 ### Q: HTML5 行内元素有哪些，块级元素有哪些，空元素有哪些?
@@ -764,6 +765,74 @@ body {font-size: 62.5%;} /*  公式16px*62.5%=10px  */
 ```
 3. 这就使 1em = (16px * 62.5%) = 10px
 4. 也就是说只需要将你的原来的px数值除以10，然后换上em作为单位就行了
+
+### Q: 如何解决移动端1像素边框问题?
+
+* 伪类 + transform 实现
+
+```
+.scale-1px{
+  position: relative;
+  margin-bottom: 20px;
+  border:none;
+}
+.scale-1px:after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #000;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 200%;
+  height: 200%;
+  -webkit-transform: scale(0.5);
+          transform: scale(0.5);
+  -webkit-transform-origin: left top;
+          transform-origin: left top;
+}
+
+/* 2倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 2.0) {
+    .scale-1px:after {
+        -webkit-transform: scaleY(0.5);
+                transform: scaleY(0.5);
+    }
+}
+
+/* 3倍屏 */
+@media only screen and (-webkit-min-device-pixel-ratio: 3.0) {
+    .scale-1px:after {
+        -webkit-transform: scaleY(0.33);
+                transform: scaleY(0.33);
+    }
+}
+```
+
+* viewport + rem 实现
+
+```
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">  
+<meta name="viewport" id="WebViewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+<script>
+    var viewport = document.querySelector("meta[name=viewport]");
+    if (window.devicePixelRatio == 1) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no');
+    }
+    if (window.devicePixelRatio == 2) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no');
+    }
+    if (window.devicePixelRatio == 3) {
+        viewport.setAttribute('content', 'width=device-width,initial-scale=0.3333333333333333, maximum-scale=0.3333333333333333, minimum-scale=0.3333333333333333, user-scalable=no');
+    }
+    var docEl = document.documentElement;
+    var fontsize = 10 * (docEl.clientWidth / 320) + 'px';
+    docEl.style.fontSize = fontsize;
+</script>
+```
+
 
 ### Q: nth-child和nth-of-type的区别
 
