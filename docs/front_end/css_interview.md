@@ -614,6 +614,7 @@ div {
 * 不知道要进行绝对居中的元素的宽度和高度
 
 ```
+// 方法一: left/top: 50%; transform:translate(-50%,-50%);
 div {
   position: absolute;
   top: 50%;
@@ -621,6 +622,16 @@ div {
   -webkit-transform:translate(-50%, -50%);
      -moz-transform:translate(-50%, -50%);
           transform:translate(-50%, -50%);
+}
+
+// 方法二: display:flex; justify-content: center; align-items: center;
+.parent-panel{
+	width:100%;
+	height:400px;
+	border:1px solid #888;
+	display: flex;
+    justify-content: center;
+    align-items: center;
 }
 ```
 
