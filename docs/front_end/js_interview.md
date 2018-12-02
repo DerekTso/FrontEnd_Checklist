@@ -50,6 +50,7 @@
 - [Q: 跨域问题](#q-跨域问题)
 - [Q: GET 和 POST 的区别](#q-get-和-post-的区别)
 - [Q: 前端渲染与后端渲染](#q-前端渲染与后端渲染)
+- [Q: 如何理解 HTTP/1.x HTTP/2 和 HTTPS](#q-如何理解-HTTP/1.x-HTTP/2-和-HTTPS)
 
 ### Q: Undefined 和 Null 的区别
 
@@ -1434,10 +1435,16 @@ function send() {
         }
     }
     ```
-    1. cors 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
-    2. postMessage: HTML5中的XMLHttpRequest Level 2中的API
-    3. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
-    4. 凡是拥有scr这个属性的标签都可以跨域例如```<script><img><iframe>```
+    3. CORS 前后端协作设置请求头部，Access-Control-Allow-Origin 等头部信息
+    ```
+    //允许所有来源访问
+    header('Access-Control-Allow-Origin:*')
+    //允许访问的方式
+    header('Access-Control-Allow-Method:POST,GET')
+    ```
+    4. postMessage: HTML5中的XMLHttpRequest Level 2中的API
+    5. web sockets: 一种浏览器的API，它的目标是在一个单独的持久连接上提供全双工、双向通信（同源策略对web sockets不适用），在JS创建了web socket之后，会有一个HTTP请求发送到浏览器以发起连接。取得服务器响应后，建立的连接会使用HTTP升级从HTTP协议交换为web sockt协议（http->ws; https->wss）。只有在支持web socket协议的服务器上才能正常工作
+    6. 凡是拥有scr这个属性的标签都可以跨域例如```<script><img><iframe>```
 4. localhost和127.0.0.1虽然都指向本机，但也属于跨域
 5. 总结: 跨域指的是浏览器不能执行其他网站的脚本，它是由浏览器的同源策略造成的，是浏览器施加的安全限制
 
@@ -1480,5 +1487,17 @@ function send() {
 1. 服务端优势其实只有首屏性能和 SEO 两点比较突出
 2. 但现在这两点也慢慢变得微不足道了
 3. React 这类支持同构的框架已经能解决这个问题
+
+### Q: 如何理解 HTTP/1.x HTTP/2 和 HTTPS
+
+1. HTTP2 使用的是二进制传送，HTTP1.X 是明文文本（字符串）传送。二进制传送的单位是帧和流。帧组成了流，同时流还有流 ID 标示，因为有流 ID，所以通过同一个 HTTP 请求实现多个 HTTP 请求传输变成了可能，可以通过流 ID 来标示究竟是哪个流从而定位到是哪个 HTTP 请求
+2. HTTP2 支持多路复用，HTTP1.X 是线程阻塞，在同一时间，同一域名的请求有一定数量限制，超过限制数目的请求会被阻塞
+3. HTTP2 头部压缩。HTTP2 通过 **gzip** 和 **compress** 压缩头部然后再发送，同时客户端和服务器端同时维护一张**头信息表**，所有字段都记录在这张表中，这样后面每次传输只需要传输表里面的索引 Id 就行，通过索引 ID 就可以知道表头的值了
+4. HTTP2 支持服务器推送
+5. HTTPs 协议需要到 CA 申请证书，一般免费证书较少，因而需要一定费用
+6. HTTP 是超文本传输协议，信息是明文传输，HTTPs 则是具有安全性的 SSL 加密传输协议
+7. HTTPS 标准端口 443，HTTP 标准端口 80
+8. HTTPS 基于传输层，HTTP 基于应用层
+9. HTTP 的连接很简单，是无状态的；HTTPS 协议是由 SSL+HTTP 协议构建的可进行加密传输、身份认证的网络协议，比 HTTP 协议安全。
 
 ---
