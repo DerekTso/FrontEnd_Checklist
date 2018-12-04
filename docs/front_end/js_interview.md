@@ -26,6 +26,7 @@
 - [Q: setTimeout、setInterval 和 requestAnimationFrame 之间的区别](#q-settimeoutsetinterval-和-requestanimationframe-之间的区别)
 - [Q: 如何理解事件绑定的兼容性问题](#q-如何理解事件绑定的兼容性问题)
 - [Q: 如何理解鼠标滚轮事件的兼容性问题](#q-如何理解鼠标滚轮事件的兼容性问题)
+- [Q: 如何理解 bind 函数](#q-如何理解-bind-函数)
 - [Q: 如何实现一个 bind 函数](#q-如何实现一个-bind-函数)
 - [Q: 如何实现一个 call 函数](#q-如何实现一个-call-函数)
 - [Q: 如何实现一个 apply 函数](#q-如何实现一个-apply-函数)
@@ -850,39 +851,71 @@ addMouseWheelHandler();
 </script>
 ```
 
+### Q: 如何理解 bind 函数
+
+1. ```bind()``` 方法会创建一个新函数，当这个新函数被调用时，它的 ```this``` 值是传递给 ```bind()``` 的第一个参数, 当使用 ```new``` 操作符调用时，该参数无效
+2. 新函数的参数是 ```bind()``` 的其他参数加上其原本的参数
+
+* 参数
+
+```
+function fn(a, b, c) {
+    return a + b + c;
+}
+
+var _fn = fn.bind(null, 10);
+var ans1 = _fn(20, 30); // 60
+var ans2 = _fn(20, 30, 40); // 60
+// fn 函数需要三个参数，_fn 函数将 10 作为默认的第一个参数，所以只需要传入两个参数即可
+// 如果你不小心传入了三个参数，放心，也只会取前两个
+```
+
+* new
+
+```
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+// 当使用 new 操作符调用绑定函数时，bind 的第一个参数无效，会被忽略
+// 原先提供的那些参数仍然会被前置到构造函数调用的前面
+var _Person = Person.bind(null, 'hanzichi');
+var p = new _Person(30); // Person {name: "hanzichi", age: 30}
+```
+
 ### Q: 如何实现一个 bind 函数
 
 ```
-Function.prototype.myBind=function(obj,arg){
-  var arg=Array.prototype.slice.call(arguments,1);
-  var context=this;
-  var bound=function(newArg){
-    arg=arg.concat(Array.prototype.slice.call(newArg));
-    return context.apply(obj,arg);
-  }
-  //寄生组合继承
-  var F=function(){}
-  F.prototype=context.prototype;
-  bound.prototype=new F();
-  return bound;
+Function.prototype.myBind = function (ctx) {
+    if (typeof this !== 'function') {
+        throw new TypeError('Error');
+    }
+    var bindArgs = Array.prototype.slice.call(arguments, 1);
+    var originFn = this;
+    var bindingFn = function () {
+        bindArgs = bindArgs.concat(Array.prototype.slice.call(arguments));
+        ctx = ctx instanceof bindingFn ? this : ctx;
+        return originFn.apply(ctx, bindArgs);
+    }
+    var emptyFn = function () {}
+    emptyFn.prototype = originFn.prototype;
+    bindingFn.prototype = new emptyFn();
+    return bindingFn;
 }
 
-或者
+// 或者
 
-Function.prototype.myBind = function (context) {
-  if (typeof this !== 'function') {
-    throw new TypeError('Error')
-  }
-  var _this = this
-  var args = [...arguments].slice(1)
-  // 返回一个函数
-  return function F() {
-    // 因为返回了一个函数，我们可以 new F()，所以需要判断
-    if (this instanceof F) {
-      return new _this(...args, ...arguments)
+Function.prototype.myBind = function (context, ...rest) {
+    if (typeof this !== 'function') {
+        throw new TypeError('Error');
     }
-    return _this.apply(context, args.concat(...arguments))
-  }
+    var originFn = this;
+    return function F() {
+        if (this instanceof F) {
+            return new originFn(...rest, ...arguments);
+        }
+        return originFn.apply(context, rest.concat(arguments));
+    }
 }
 ```
 
@@ -963,8 +996,8 @@ Function.prototype.myInstanceof = function (A, B) {
           setTimeout(function () {  
             console.log(this); // obj     
           }.bind(this));  
-        }  
-      }  
+        }
+      }
       obj.say();
     ```
 2. 箭头函数的 this 是静态的。它是一个词法（lexical ）上的值，它取决于 this 在哪个作用域中定义
