@@ -914,7 +914,7 @@ Function.prototype.myBind = function (context, ...rest) {
         if (this instanceof F) {
             return new originFn(...rest, ...arguments);
         }
-        return originFn.apply(context, rest.concat(arguments));
+        return originFn.apply(context, [...rest, ...arguments]);
     }
 }
 ```
@@ -922,13 +922,12 @@ Function.prototype.myBind = function (context, ...rest) {
 ### Q: 如何实现一个 call 函数
 
 ```
-Function.prototype.myCall = function (context) {
-  var context = context || window
-  context.fn = this
-  var args = [...arguments].slice(1)
-  var result = context.fn(...args)
-  delete context.fn
-  return result
+Function.prototype.myCall = function (context, ...rest) {
+    var context = context || window;
+    context.fn = this;
+    var result = context.fn(...rest);
+    delete context.fn;
+    return result;
 }
 ```
 
@@ -936,17 +935,17 @@ Function.prototype.myCall = function (context) {
 
 ```
 Function.prototype.myApply = function (context) {
-  var context = context || window
-  context.fn = this
-  var result
-  if (arguments[1]) {
-    result = context.fn(...arguments[1])
-  } else {
-    result = context.fn()
+    var context = context || window;
+    context.fn = this;
+    var result;
+    if (arguments[1]) {
+      result = context.fn(...arguments[1]);
+    } else {
+      result = context.fn();
+    }
+    delete context.fn;
+    return result;
   }
-  delete context.fn
-  return result
-}
 ```
 
 ### Q: 如何实现一个 instanceof 函数
